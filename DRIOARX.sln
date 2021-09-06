@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRIPipeLineUi", "DRIPipeLineUi\DRIPipeLineUi.vcxproj", "{E071FE94-74A8-47AF-A391-7F229339C8AE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3} = {F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoaderUnloader", "LoaderUnloader\LoaderUnloader.vcxproj", "{A31A6F73-8373-4143-944B-27E3C691C203}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PipeLineObj", "PipeLineObj\PipeLineObj.vcxproj", "{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E071FE94-74A8-47AF-A391-7F229339C8AE}.Debug|x64.ActiveCfg = Debug|x64
+		{E071FE94-74A8-47AF-A391-7F229339C8AE}.Debug|x64.Build.0 = Debug|x64
+		{E071FE94-74A8-47AF-A391-7F229339C8AE}.Release|x64.ActiveCfg = Release|x64
+		{E071FE94-74A8-47AF-A391-7F229339C8AE}.Release|x64.Build.0 = Release|x64
+		{A31A6F73-8373-4143-944B-27E3C691C203}.Debug|x64.ActiveCfg = Debug|x64
+		{A31A6F73-8373-4143-944B-27E3C691C203}.Debug|x64.Build.0 = Debug|x64
+		{A31A6F73-8373-4143-944B-27E3C691C203}.Release|x64.ActiveCfg = Release|x64
+		{A31A6F73-8373-4143-944B-27E3C691C203}.Release|x64.Build.0 = Release|x64
+		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Debug|x64.ActiveCfg = Debug|x64
+		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Debug|x64.Build.0 = Debug|x64
+		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Release|x64.ActiveCfg = Release|x64
+		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99318B1D-EA6E-45B6-9634-369C21377915}
+	EndGlobalSection
+EndGlobal
