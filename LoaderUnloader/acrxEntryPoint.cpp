@@ -143,9 +143,9 @@ public:
 
 	static void DRILoaderUnloaderLLoadBg()
 	{
-		acrxLoadModule(_T("X:\\26 ObjectArx\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
+		acrxLoadModule(_T("E:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
 		//acedArxLoad(_T("X:\\26 ObjectArx\\ObjectArx2022Training\\Step01\\x64\\Debug\\DRIPipelineProject.dbx"));
-		acedArxLoad(_T("X:\\26 ObjectArx\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
+		acedArxLoad(_T("E:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
 	}
 
 	static void DRILoaderUnloaderULoad()
