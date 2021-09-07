@@ -25,9 +25,9 @@
 
 //-----------------------------------------------------------------------------
 //DRILineJig::DRILineJig(AcDbLine* pEntity) : AcEdJig(), mCurrentInputLevel(0)
-DRILineJig::DRILineJig() : AcEdJig(), mCurrentInputLevel(0), mpEntity(NULL)
+DRILineJig::DRILineJig(bool keepJigLine) : AcEdJig(), mCurrentInputLevel(0), mpEntity(NULL)
 {
-
+	mpKeepJigLine = keepJigLine;
 }
 
 DRILineJig::~DRILineJig()
@@ -100,9 +100,9 @@ AcEdJig::DragStatus DRILineJig::startJig(AcDbLine* pEntity)
 	if (appendOk)
 		//- Append to the database
 	{
-		//append();
 		foundPoint = AcGePoint3d(mpEntity->endPoint());
-		delete mpEntity;
+		if (mpKeepJigLine) append();
+		else delete mpEntity;
 	}
 	else
 		//- Clean up
@@ -152,7 +152,8 @@ AcEdJig::DragStatus DRILineJig::sampler()
 	{
 	case 1:
 		// TODO : get an input here
-		status = GetNextPoint();
+		//status = GetNextPoint();
+		status = GetStartPoint();
 		break;
 
 	default:

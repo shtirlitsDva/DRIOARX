@@ -41,11 +41,11 @@ public:
 	//- Entity being jigged
 	AcDbLine* mpEntity;
 	AcGePoint3d foundPoint;
-	//AcGePoint3d getFoundPoint();
+	bool mpKeepJigLine = false;
 
 public:
 	//DRILineJig(AcDbLine* pEntity);
-	DRILineJig();
+	DRILineJig(bool keepJigLine = false);
 	~DRILineJig();
 
 	//- Command invoke the jig, call passing a new'd instance of the object to jig

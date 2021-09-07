@@ -182,9 +182,7 @@ public:
 			}
 		}
 
-		//TODO: add ucs consideration if needed
 		bool continueLoop = true;
-
 		while (continueLoop)
 		{
 			//If pipeline still has 0 vertices, it should mean
@@ -230,7 +228,6 @@ public:
 
 				//Add the received point to pline's vertices
 				dripl->addVertexAt(dripl->numVerts(), asPnt2d(startingPoint));
-				
 
 				//Loop around until the next point is received
 				//The user can choose to add a size
@@ -294,12 +291,20 @@ public:
 				//update the pipline's graphics
 				dripl->draw();
 			}
+			else if (dripl->numVerts() == 1)
+			{
+				acutPrintf(_T("\nThe DRIpl is in invalid state! Only one vertex present! It has to be deleted!"));
+				dripl->erase(true);
+				return;
+			}
 			else
 			{
 				//Loop around until the next point is received
 				//The user can choose to add a size
 				//Or cancel and exit the command
 				AcEdJig::DragStatus result = AcEdJig::kNull;
+				//Setup a previous line to enable polar tracking to last segment
+
 				while (result != kNormal)
 				{
 					//This code executes if the pipeline has not zero vertices
@@ -317,6 +322,7 @@ public:
 					switch (result)
 					{
 					case AcEdJig::kCancel:
+						//in this CASE line is already deleted in jig
 						delete lJig;
 						return;
 					case AcEdJig::kNormal:
@@ -347,6 +353,11 @@ public:
 				dripl->draw();
 			}
 		}
+	}
+
+	static void DRIPipelineUiTestCpl()
+	{
+
 	}
 
 	static void DRIPipelineUiPrintInfo()
