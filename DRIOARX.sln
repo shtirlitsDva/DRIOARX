@@ -12,6 +12,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoaderUnloader", "LoaderUnl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PipeLineObj", "PipeLineObj\PipeLineObj.vcxproj", "{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestEPlineTut", "TestEPlineTut\TestEPlineTut.vcxproj", "{E777E15D-020E-4E55-AC31-50D890A51FC2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EPlineTutDb", "EPlineTutDb\EPlineTutDb.vcxproj", "{C0DFB538-2D08-4778-AF94-5D2B01092E4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -30,6 +34,14 @@ Global
 		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Debug|x64.Build.0 = Debug|x64
 		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Release|x64.ActiveCfg = Release|x64
 		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Release|x64.Build.0 = Release|x64
+		{E777E15D-020E-4E55-AC31-50D890A51FC2}.Debug|x64.ActiveCfg = Debug|x64
+		{E777E15D-020E-4E55-AC31-50D890A51FC2}.Debug|x64.Build.0 = Debug|x64
+		{E777E15D-020E-4E55-AC31-50D890A51FC2}.Release|x64.ActiveCfg = Release|x64
+		{E777E15D-020E-4E55-AC31-50D890A51FC2}.Release|x64.Build.0 = Release|x64
+		{C0DFB538-2D08-4778-AF94-5D2B01092E4A}.Debug|x64.ActiveCfg = Debug|x64
+		{C0DFB538-2D08-4778-AF94-5D2B01092E4A}.Debug|x64.Build.0 = Debug|x64
+		{C0DFB538-2D08-4778-AF94-5D2B01092E4A}.Release|x64.ActiveCfg = Release|x64
+		{C0DFB538-2D08-4778-AF94-5D2B01092E4A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
