@@ -26,6 +26,8 @@
 #include "resource.h"
 #include "../PipeLineObj/DRIPipelinePolyline.h"
 #include "DRILineJig.h"
+#include "DRIPolylineJig.h"
+#include "DRILineJigT.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -439,6 +441,39 @@ public:
 			}
 		}
 	}
+
+	static void DRIPipelineUiTestPL()
+	{
+		DRIPolylineJig jig{ DRIPolylineJig() };
+		jig.CreateEntity();
+	}
+
+	static void DRIPipelineUiTestJig()
+	{
+		while (true)
+		{
+			AcDbLine* line = new AcDbLine();
+			DRILineJigT* jig = new DRILineJigT();
+			AcEdJig::DragStatus status = jig->startJig(line);
+			switch (status)
+			{
+			case AcEdJig::kModeless:
+				break;
+			case AcEdJig::kNoChange:
+				break;
+			case AcEdJig::kCancel:
+				return;
+			case AcEdJig::kOther:
+				break;
+			case AcEdJig::kNull:
+				break;
+			case AcEdJig::kNormal:
+				break;
+			default:
+				break;
+			}
+		}
+	}
 };
 
 //-----------------------------------------------------------------------------
@@ -452,4 +487,6 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, CreatePipeline, _cp
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, PrintInfo, _pinfo, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, InsertSize, _is, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ChangeSize, _cs, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestPL, _TestPL, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestJig, _TestJig, ACRX_CMD_MODAL, NULL)
 
