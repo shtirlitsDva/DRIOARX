@@ -90,9 +90,7 @@
     <ClCompile Include="ArcCalcs.cpp" />
     <ClCompile Include="DocData.cpp" />
     <ClCompile Include="DRILineJig.cpp" />
-    <ClCompile Include="DRILineJigT.cpp" />
     <ClCompile Include="DRIPipeLineUi.cpp" />
-    <ClCompile Include="DRIPolylineJig.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -103,8 +101,6 @@
     <ClInclude Include="ArcCalcs.h" />
     <ClInclude Include="DocData.h" />
     <ClInclude Include="DRILineJig.h" />
-    <ClInclude Include="DRILineJigT.h" />
-    <ClInclude Include="DRIPolylineJig.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="Utility.h" />

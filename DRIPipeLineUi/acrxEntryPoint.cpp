@@ -26,8 +26,6 @@
 #include "resource.h"
 #include "../PipeLineObj/DRIPipelinePolyline.h"
 #include "DRILineJig.h"
-#include "DRIPolylineJig.h"
-#include "DRILineJigT.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -149,6 +147,8 @@ public:
 		acedInitGet(0, L"<New> Continue");
 		int res = acedGetKword(_T("\n[<New> Continue]: "), result);
 
+		AcDbObjectId driplId;
+
 		//acutPrintf(_T("\nReturned: %d"), res);
 
 		//if (res == RTNORM)
@@ -173,20 +173,20 @@ public:
 			if (acedEntSel(_T("Select pipeline to continue: "), ename, pt) != RTNORM)
 				return;
 
-			AcDbObjectId idO;
-			if (acdbGetObjectId(idO, ename) != Acad::eOk)
+			if (acdbGetObjectId(driplId, ename) != Acad::eOk)
 				return;
 
-			if (dripl.open(idO, AcDb::kForWrite) != Acad::eOk)
-			{
-				acutPrintf(_T("\nNot a pipeline!"));
-				return;
-			}
+
 		}
 
 		bool continueLoop = true;
 		while (continueLoop)
 		{
+			if (dripl.open(driplId, AcDb::kForWrite) != Acad::eOk)
+			{
+				acutPrintf(_T("\nNot a pipeline!"));
+				return;
+			}
 			//If pipeline still has 0 vertices, it should mean
 			//That it is a new object
 			//And because I couldn't find a method for Jig to not draw a point from 0,0
@@ -284,7 +284,10 @@ public:
 					ACDB_MODEL_SPACE, acdbHostApplicationServices()->workingDatabase(), AcDb::kForWrite) == Acad::eOk)
 				{
 					if (pModelSpaceRecord->appendAcDbEntity(dripl) == Acad::eOk)
+					{
+						driplId = dripl->id();
 						acutPrintf(_T("\nObject created!"));
+					}
 					else
 						acutPrintf(_T("\nObject creation failed!"));
 				}
@@ -292,6 +295,7 @@ public:
 				dripl->UpdateLastSegment();
 				//update the pipline's graphics
 				dripl->draw();
+				//dripl->close();
 			}
 			else if (dripl->numVerts() == 1)
 			{
@@ -354,12 +358,105 @@ public:
 				dripl->UpdateLastSegment();
 				dripl->draw();
 			}
+
+			dripl->close();
 		}
 	}
 
-	static void DRIPipelineUiTestCpl()
+	static void DRIPipelineUiConvertPipes()
 	{
+		AcDbObjectId driplId;
+		AcString result;
+		acedInitGet(0, L"<New> Continue");
+		int res = acedGetKword(_T("\n[<New> Continue]: "), result);
 
+		//Got escape key OR Ctrl+C
+		if (res == RTCAN) return;
+		//Enter pressed
+		else if (res == RTNONE) result = _T("New");
+		//Determine what kind of keyword we got back
+		AcDbObjectPointer<DRIPipelinePolyline> dripl;
+		if (result.compare(_T("New")) == 0)
+		{
+			//new object is created
+			dripl.create();
+			dripl->InitializeSegments();
+
+			//Add the pipeline to the database
+			AcDbBlockTableRecordPointer pModelSpaceRecord;
+			if (pModelSpaceRecord.open(
+				ACDB_MODEL_SPACE, acdbHostApplicationServices()->workingDatabase(),
+				AcDb::kForWrite) == Acad::eOk)
+			{
+				if (pModelSpaceRecord->appendAcDbEntity(dripl) == Acad::eOk)
+				{
+					driplId = dripl->id();
+					acutPrintf(_T("\nObject created!"));
+				}
+				else
+					acutPrintf(_T("\nObject creation failed!"));
+			}
+		}
+		else if (result.compare(_T("Continue")) == 0)
+		{
+			//Existing object is selected for continuation
+			ads_name ename;
+			ads_point pt;
+			if (acedEntSel(_T("Select pipeline to continue: "), ename, pt) != RTNORM)
+			{
+				//Plines with vertex counts of less than 2 may not be posted to database
+				if (dripl->numVerts() < 2)
+				{
+					dripl->erase(true);
+				}
+				return;
+			}
+
+			if (acdbGetObjectId(driplId, ename) != Acad::eOk)
+				return;
+
+			if (dripl.open(driplId, AcDb::kForWrite) != Acad::eOk)
+			{
+				acutPrintf(_T("\nNot a pipeline!"));
+				return;
+			}
+		}
+
+		bool ContinueConvertLoop = true;
+
+		while (ContinueConvertLoop)
+		{
+			//Existing object is selected for continuation
+			ads_name ename;
+			ads_point pt;
+			if (acedEntSel(_T("Select (poly)line to convert: "), ename, pt) != RTNORM)
+				return;
+			
+			AcDbObjectId plineId;
+			if (acdbGetObjectId(plineId, ename) != Acad::eOk)
+				continue;
+
+			AcDbObjectPointer<AcDbPolyline> pline;
+			if (pline.open(plineId) != Acad::eOk)
+			{
+				acutPrintf(_T("Selected object is not a polyline!"));
+				continue;
+			}
+
+			if (dripl->numVerts() == 0)
+			{
+				for (int i = 0; i < pline->numVerts(); i++)
+				{
+					AcGePoint3d pt;
+					pline->getPointAt(i, pt);
+					AcGePoint2d pt2d{ pt.x, pt.y };
+					double bulge;
+					pline->getBulgeAt(i, bulge);
+					dripl->addVertexAt(
+						dripl->numVerts(), pt2d, bulge, 0, 0);
+				}
+			}
+		}
 	}
 
 	static void DRIPipelineUiPrintInfo()
@@ -381,7 +478,6 @@ public:
 		}
 		dripl->PrintInfo();
 	}
-
 	static void DRIPipelineUiInsertSize()
 	{
 		ads_name ename;
@@ -411,7 +507,6 @@ public:
 			}
 		}
 	}
-
 	static void DRIPipelineUiChangeSize()
 	{
 		ads_name ename;
@@ -441,39 +536,6 @@ public:
 			}
 		}
 	}
-
-	static void DRIPipelineUiTestPL()
-	{
-		DRIPolylineJig jig{ DRIPolylineJig() };
-		jig.CreateEntity();
-	}
-
-	static void DRIPipelineUiTestJig()
-	{
-		while (true)
-		{
-			AcDbLine* line = new AcDbLine();
-			DRILineJigT* jig = new DRILineJigT();
-			AcEdJig::DragStatus status = jig->startJig(line);
-			switch (status)
-			{
-			case AcEdJig::kModeless:
-				break;
-			case AcEdJig::kNoChange:
-				break;
-			case AcEdJig::kCancel:
-				return;
-			case AcEdJig::kOther:
-				break;
-			case AcEdJig::kNull:
-				break;
-			case AcEdJig::kNormal:
-				break;
-			default:
-				break;
-			}
-		}
-	}
 };
 
 //-----------------------------------------------------------------------------
@@ -487,6 +549,5 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, CreatePipeline, _cp
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, PrintInfo, _pinfo, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, InsertSize, _is, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ChangeSize, _cs, ACRX_CMD_MODAL, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestPL, _TestPL, ACRX_CMD_MODAL, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestJig, _TestJig, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ConvertPipes, _convp, ACRX_CMD_MODAL, NULL)
 
