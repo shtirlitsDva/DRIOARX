@@ -42,7 +42,7 @@
 //----- going away.
 #define DLLIMPEXP
 #endif
-
+#define EPLINETUTDB_DBXSERVICE _T("EPLINETUTDB_DBXSERVICE")
 //-----------------------------------------------------------------------------
 #include "dbpl.h"
 #include "OffsetProperty.h"

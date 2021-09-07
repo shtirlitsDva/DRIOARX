@@ -19,7 +19,7 @@
 
 
 #pragma once
-#include "c:\objectarx 2008\inc\dbjig.h"
+#include "c:\objectarx\inc\dbjig.h"
 
 class EPlineDxf;
 

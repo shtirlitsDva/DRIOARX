@@ -27,9 +27,9 @@
 #pragma once
 #define TESTEPLINETUT_MODULE
 
-/*#ifndef
+#ifndef _ALLOW_RTCc_IN_STL
 #define _ALLOW_RTCc_IN_STL
-#endif*/
+#endif
 
 #pragma pack(push, 8)
 #pragma warning(disable : 4786 4996)
@@ -54,6 +54,7 @@
     
         //- ObjectARX and OMF headers needs this
 #include <map>
+#include "tchar.h"
 
     //-----------------------------------------------------------------------------
 #include <afxwin.h> //- MFC core and standard components

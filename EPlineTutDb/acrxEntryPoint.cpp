@@ -24,6 +24,7 @@
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "resource.h"
+#include "EPlineDxf.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("rpk")
@@ -39,19 +40,19 @@ public:
 	virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt)
 	{
 		// TODO: Load dependencies here
-
+		acrxDynamicLinker->unlockApplication(pkt);
 		// You *must* call On_kInitAppMsg here
 		AcRx::AppRetCode retCode = AcRxDbxApp::On_kInitAppMsg(pkt);
 
 		// TODO: Add your initialization code here
-
+		acrxRegisterService(EPLINETUTDB_DBXSERVICE);
 		return (retCode);
 	}
 
 	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt)
 	{
 		// TODO: Add your code here
-
+		delete acrxServiceDictionary->remove(EPLINETUTDB_DBXSERVICE);
 		// You *must* call On_kUnloadAppMsg here
 		AcRx::AppRetCode retCode = AcRxDbxApp::On_kUnloadAppMsg(pkt);
 

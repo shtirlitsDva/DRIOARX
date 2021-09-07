@@ -31,38 +31,41 @@
 
 //-----------------------------------------------------------------------------
 //----- ObjectARX EntryPoint
-class CPipeLineObjApp : public AcRxDbxApp {
+class CPipeLineObjApp : public AcRxDbxApp
+{
 
 public:
-	CPipeLineObjApp () : AcRxDbxApp () {}
+	CPipeLineObjApp() : AcRxDbxApp() {}
 
-	virtual AcRx::AppRetCode On_kInitAppMsg (void *pkt) {
+	virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt)
+	{
 		// TODO: Load dependencies here
 		acrxDynamicLinker->unlockApplication(pkt);
 		// You *must* call On_kInitAppMsg here
-		AcRx::AppRetCode retCode =AcRxDbxApp::On_kInitAppMsg (pkt) ;
-		
+		AcRx::AppRetCode retCode = AcRxDbxApp::On_kInitAppMsg(pkt);
+
 		// TODO: Add your initialization code here
 		acrxRegisterService(DRIPIPELINEPOLYLINE_DBXSERVICE);
-		return (retCode) ;
+		return (retCode);
 	}
 
-	virtual AcRx::AppRetCode On_kUnloadAppMsg (void *pkt) {
+	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt)
+	{
 		// TODO: Add your code here
 		delete acrxServiceDictionary->remove(DRIPIPELINEPOLYLINE_DBXSERVICE);
 		deleteAcRxClass(DRIPipelinePolyline::desc());
 		// You *must* call On_kUnloadAppMsg here
-		AcRx::AppRetCode retCode =AcRxDbxApp::On_kUnloadAppMsg (pkt) ;
+		AcRx::AppRetCode retCode = AcRxDbxApp::On_kUnloadAppMsg(pkt);
 
 		// TODO: Unload dependencies here
 
-		return (retCode) ;
+		return (retCode);
 	}
 
-	virtual void RegisterServerComponents () {
-	}
-	
-} ;
+	virtual void RegisterServerComponents()
+	{	}
+
+};
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CPipeLineObjApp)

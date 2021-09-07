@@ -64,7 +64,7 @@
     <Link>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../EPlineTutDb/%(Platform)/%(Configuration)/DRIEPlineTutDb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../EPlineTutDb/$(Platform)/$(Configuration)/DRIEPlineTutDb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
