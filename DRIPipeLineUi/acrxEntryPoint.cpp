@@ -147,10 +147,6 @@ public:
 		acedInitGet(0, L"<New> Continue");
 		int res = acedGetKword(_T("\n[<New> Continue]: "), result);
 
-		AcDbObjectId driplId;
-
-		//acutPrintf(_T("\nReturned: %d"), res);
-
 		//if (res == RTNORM)
 		//{ //Got keyword //}
 		//Got escape key OR Ctrl+C
@@ -173,20 +169,16 @@ public:
 			if (acedEntSel(_T("Select pipeline to continue: "), ename, pt) != RTNORM)
 				return;
 
+			AcDbObjectId driplId;
 			if (acdbGetObjectId(driplId, ename) != Acad::eOk)
 				return;
 
-
+			dripl.open(driplId, AcDb::kForWrite);
 		}
 
 		bool continueLoop = true;
 		while (continueLoop)
 		{
-			if (dripl.open(driplId, AcDb::kForWrite) != Acad::eOk)
-			{
-				acutPrintf(_T("\nNot a pipeline!"));
-				return;
-			}
 			//If pipeline still has 0 vertices, it should mean
 			//That it is a new object
 			//And because I couldn't find a method for Jig to not draw a point from 0,0
@@ -285,7 +277,6 @@ public:
 				{
 					if (pModelSpaceRecord->appendAcDbEntity(dripl) == Acad::eOk)
 					{
-						driplId = dripl->id();
 						acutPrintf(_T("\nObject created!"));
 					}
 					else
@@ -358,8 +349,6 @@ public:
 				dripl->UpdateLastSegment();
 				dripl->draw();
 			}
-
-			dripl->close();
 		}
 	}
 
@@ -430,8 +419,15 @@ public:
 			ads_name ename;
 			ads_point pt;
 			if (acedEntSel(_T("Select (poly)line to convert: "), ename, pt) != RTNORM)
+			{
+				//Plines with vertex counts of less than 2 may not be posted to database
+				if (dripl->numVerts() < 2)
+				{
+					dripl->erase(true);
+				}
 				return;
-			
+			}
+
 			AcDbObjectId plineId;
 			if (acdbGetObjectId(plineId, ename) != Acad::eOk)
 				continue;
@@ -443,7 +439,26 @@ public:
 				continue;
 			}
 
-			if (dripl->numVerts() == 0)
+			//////////////////////////////////////////////////////////////
+			//Detect if polyline is reversed
+			//////////////////////////////////////////////////////////////
+			if (dripl->numVerts() != 0)
+			{
+				AcGePoint3d firstPoint; pline->getPointAt(0, firstPoint);
+				AcGePoint3d lastPoint; pline->getPointAt(pline->numVerts() - 1, lastPoint);
+				AcGePoint3d p2compare; dripl->getPointAt(dripl->numVerts() - 1, p2compare);
+
+				double distToFirst = p2compare.distanceTo(firstPoint);
+				double distToLast = p2compare.distanceTo(lastPoint);
+
+				if (distToFirst > distToLast)
+				{//Pline is reversed -> reverse it!
+					pline->upgradeOpen();
+					pline->reverseCurve();
+					pline->downgradeOpen();
+				}
+			}
+
 			{
 				for (int i = 0; i < pline->numVerts(); i++)
 				{
@@ -452,10 +467,11 @@ public:
 					AcGePoint2d pt2d{ pt.x, pt.y };
 					double bulge;
 					pline->getBulgeAt(i, bulge);
-					dripl->addVertexAt(
-						dripl->numVerts(), pt2d, bulge, 0, 0);
+					dripl->addVertexAt(dripl->numVerts(), pt2d, bulge, 0, 0);
 				}
 			}
+			dripl->UpdateLastSegment();
+			dripl->draw();
 		}
 	}
 
