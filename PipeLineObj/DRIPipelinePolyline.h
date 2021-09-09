@@ -61,18 +61,27 @@ public:
 	void UpdateLastSegment();
 	void AddSize(int sizeToAdd);
 	void PrintInfo();
-	int SizeAtDist(double dist);
+	
+	Enums::Supplier Supplier() const;
+	Acad::ErrorStatus SetSupplier(const Enums::Supplier supplier);
+	Enums::Type PipeType() const;
+	Acad::ErrorStatus SetPipeType(const Enums::Type type);
+	Enums::System System() const;
+	Acad::ErrorStatus SetSystem(const Enums::System system);
+	Enums::Series Series() const;
+	Acad::ErrorStatus SetSeries(const Enums::Series series);
+
+	int SizeAtDist(double dist) const;
+
+private:
+	Enums::Supplier mSupplier{ Enums::Supplier::Isoplus };
+	Enums::Type mPipetype{ Enums::Type::BondedPipeSystem };
+	Enums::System mSystem{ Enums::System::TwinPipe };
+	Enums::Series mSeries{ Enums::Series::Serie_3 };
+	int calculateKey() const;
 
 	AcArray<int> aSize{};
 	AcArray<double> aSegments{};
-
-	Enums::Supplier Supplier{ Enums::Supplier::Isoplus };
-	Enums::Type PipeType{ Enums::Type::BondedPipeSystem };
-	Enums::System System{ Enums::System::TwinPipe };
-	Enums::Series Series{ Enums::Series::Serie_3 };
-
-private:
-	int calculateKey();
 
 protected:
 	static Adesk::UInt32 kCurrentVersionNumber;

@@ -49,11 +49,13 @@ DRIPipelinePolyline::~DRIPipelinePolyline()
 
 void DRIPipelinePolyline::InitializeSegments()
 {
+	assertWriteEnabled();
 	aSize.append(200);
 }
 
 void DRIPipelinePolyline::InsertSize(int newSize, ads_point pt)
 {
+	assertWriteEnabled();
 	//Function assumes that segment tracking is in valid state
 	AcGePoint3d closestPoint;
 	if (getClosestPointTo(asPnt3d(pt), closestPoint) != Acad::eOk)
@@ -117,6 +119,7 @@ void DRIPipelinePolyline::InsertSize(int newSize, ads_point pt)
 
 void DRIPipelinePolyline::ChangeSize(int newSize, ads_point pt)
 {
+	assertWriteEnabled();
 	//Function assumes that segment tracking is in valid state
 	AcGePoint3d closestPoint;
 	if (getClosestPointTo(asPnt3d(pt), closestPoint) != Acad::eOk)
@@ -142,6 +145,7 @@ void DRIPipelinePolyline::ChangeSize(int newSize, ads_point pt)
 
 	//Handle a special case of only one size at all
 	//Here the size is inserted after the start of the first one
+	
 	if (aSegments.length() == 1)
 	{
 		aSize.append(newSize);
@@ -161,12 +165,11 @@ void DRIPipelinePolyline::ChangeSize(int newSize, ads_point pt)
 }
 
 void DRIPipelinePolyline::ConsolidateSizes()
-{
-	//Assumes state is valid
-
+{//Assumes state is valid
+	assertWriteEnabled();
 	//If length()==1 abort or there'll be out of bounds
 	if (aSize.length() == 1) return;
-
+	
 	int length = aSize.length();
 	//Forward looking -> length()-1
 	for (int i = 0; i < length - 1; i++)
@@ -183,6 +186,7 @@ void DRIPipelinePolyline::ConsolidateSizes()
 
 void DRIPipelinePolyline::AddSize(int newSize)
 {
+	assertWriteEnabled();
 	int sizeLength = aSize.length();
 	int segmentsLength = aSegments.length();
 
@@ -195,7 +199,7 @@ void DRIPipelinePolyline::AddSize(int newSize)
 		length = 0;
 
 	AcGeTol* tol = new AcGeTol();
-
+	
 	//if ((aSegments[segmentsLength - 1] - length) <= tol->equalPoint())
 	//{
 	//	//Means the size has just been added
@@ -211,6 +215,7 @@ void DRIPipelinePolyline::AddSize(int newSize)
 //This method assumes that a size has just been added
 void DRIPipelinePolyline::UpdateLastSegment()
 {
+	assertWriteEnabled();
 	int sizeLength = aSize.length();
 	int segmentsLength = aSegments.length();
 
@@ -221,8 +226,7 @@ void DRIPipelinePolyline::UpdateLastSegment()
 	double length;
 	if (getDistAtParam(endParam, length) != Acad::eOk)
 		length = 0;
-
-
+	
 	//The number of sizes corresponds to number of segments
 	//Updating last segment
 	if (sizeLength == segmentsLength)
@@ -238,6 +242,7 @@ void DRIPipelinePolyline::UpdateLastSegment()
 
 void DRIPipelinePolyline::PrintInfo()
 {
+	assertReadEnabled();
 	acutPrintf(_T("\n"));
 	acutPrintf(_T("\naSize length: %d"), aSize.length());
 	for (int i = 0; i < aSize.length(); i++)
@@ -250,6 +255,60 @@ void DRIPipelinePolyline::PrintInfo()
 		acutPrintf(_T("\n%d: %f"), i, aSegments[i]);
 	}
 }
+
+Enums::Supplier DRIPipelinePolyline::Supplier() const
+{
+	assertReadEnabled();
+	return mSupplier;
+}
+
+Acad::ErrorStatus DRIPipelinePolyline::SetSupplier(const Enums::Supplier supplier)
+{
+	assertWriteEnabled();
+	mSupplier = supplier;
+	return Acad::eOk;
+}
+
+Enums::Type DRIPipelinePolyline::PipeType() const
+{
+	assertReadEnabled();
+	return mPipetype;
+}
+
+Acad::ErrorStatus DRIPipelinePolyline::SetPipeType(Enums::Type type)
+{
+	assertWriteEnabled();
+	mPipetype = type;
+	return Acad::eOk;
+}
+
+Enums::System DRIPipelinePolyline::System() const
+{
+	assertReadEnabled();
+	return mSystem;
+}
+
+Acad::ErrorStatus DRIPipelinePolyline::SetSystem(Enums::System system)
+{
+	assertWriteEnabled();
+	mSystem = system;
+	return Acad::eOk;
+}
+
+Enums::Series DRIPipelinePolyline::Series() const
+{
+	assertReadEnabled();
+	return mSeries;
+}
+
+Acad::ErrorStatus DRIPipelinePolyline::SetSeries(Enums::Series series)
+{
+	assertWriteEnabled();
+	mSeries = series;
+	return Acad::eOk;
+}
+
+
 
 //-----------------------------------------------------------------------------
 //----- AcDbObject protocols
@@ -279,13 +338,13 @@ Acad::ErrorStatus DRIPipelinePolyline::dwgOutFields(AcDbDwgFiler * pFiler) const
 	}
 	{
 		//Supplier
-		pFiler->writeInt8((Adesk::Int8)Supplier);
+		pFiler->writeInt8((Adesk::Int8)Supplier());
 		//Type
-		pFiler->writeInt8((Adesk::Int8)PipeType);
+		pFiler->writeInt8((Adesk::Int8)PipeType());
 		//System
-		pFiler->writeInt8((Adesk::Int8)System);
+		pFiler->writeInt8((Adesk::Int8)System());
 		//Series
-		pFiler->writeInt8((Adesk::Int8)Series);
+		pFiler->writeInt8((Adesk::Int8)Series());
 	}
 
 	return (pFiler->filerStatus());
@@ -331,25 +390,25 @@ Acad::ErrorStatus DRIPipelinePolyline::dwgInFields(AcDbDwgFiler * pFiler)
 		//Supplier
 		Adesk::Int8 value;
 		pFiler->readInt8(&value);
-		Supplier = (Enums::Supplier)value;
+		SetSupplier((Enums::Supplier)value);
 	}
 	{
 		//Type
 		Adesk::Int8 value;
 		pFiler->readInt8(&value);
-		PipeType = (Enums::Type)value;
+		SetPipeType((Enums::Type)value);
 	}
 	{
 		//System
 		Adesk::Int8 value;
 		pFiler->readInt8(&value);
-		System = (Enums::System)value;
+		SetSystem((Enums::System)value);
 	}
 	{
 		//Series
 		Adesk::Int8 value;
 		pFiler->readInt8(&value);
-		Series = (Enums::Series)value;
+		SetSeries((Enums::Series)value);
 	}
 
 	return (pFiler->filerStatus());
@@ -596,20 +655,21 @@ Adesk::Boolean DRIPipelinePolyline::subWorldDraw(AcGiWorldDraw * mode)
 	return (Adesk::kFalse);
 }
 
-int DRIPipelinePolyline::SizeAtDist(double dist)
+int DRIPipelinePolyline::SizeAtDist(double dist) const
 {
+	assertReadEnabled();
 	for (int i = 0; i < aSize.length(); i++)
 		if (dist <= aSegments[i]) return aSize[i];
 	return 0;
 }
 
-int DRIPipelinePolyline::calculateKey()
+int DRIPipelinePolyline::calculateKey() const
 {
 	return
-		(int)Supplier * 1000 +
-		(int)PipeType * 100 +
-		(int)System * 10 +
-		(int)Series;
+		(int)Supplier() * 1000 +
+		(int)PipeType() * 100 +
+		(int)System() * 10 +
+		(int)Series();
 }
 
 void DRIPipelinePolyline::subViewportDraw(AcGiViewportDraw * mode)
