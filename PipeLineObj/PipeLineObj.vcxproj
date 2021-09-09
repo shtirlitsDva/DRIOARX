@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acrxEntryPoint.cpp" />
+    <ClCompile Include="DRIPipeLabel.cpp" />
+    <ClCompile Include="DRIPipeLabelGroup.cpp" />
     <ClCompile Include="DRIPipelinePolyline.cpp" />
     <ClCompile Include="PipeLineObj.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -85,6 +87,8 @@
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DRIPipeLabel.h" />
+    <ClInclude Include="DRIPipeLabelGroup.h" />
     <ClInclude Include="DRIPipelinePolyline.h" />
     <ClInclude Include="meta_enum.hpp" />
     <ClInclude Include="Resource.h" />
