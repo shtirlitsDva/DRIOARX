@@ -454,6 +454,7 @@ Acad::ErrorStatus DRIPipelinePolyline::subClose()
 void DRIPipelinePolyline::openedForModify(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
+	acutPrintf(_T("\nObject opened for modify!"));
 	AcDbPolyline::openedForModify(pDbObj);
 }
 
@@ -536,6 +537,8 @@ Adesk::Boolean DRIPipelinePolyline::subWorldDraw(AcGiWorldDraw * mode)
 	assertReadEnabled();
 	if (mode)
 	{
+		UpdateLastSegment();
+
 		{
 			/// <summary>
 			/// Draws pipe size labels at specified interval.
