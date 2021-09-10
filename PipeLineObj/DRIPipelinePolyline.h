@@ -71,17 +71,17 @@ public:
 	Enums::Series Series() const;
 	Acad::ErrorStatus SetSeries(const Enums::Series series);
 
+	AcArray<int> aSize{};
+	AcArray<double> aSegments{};
+	
 	int SizeAtDist(double dist) const;
-
+	
 private:
 	Enums::Supplier mSupplier{ Enums::Supplier::Isoplus };
 	Enums::Type mPipetype{ Enums::Type::BondedPipeSystem };
 	Enums::System mSystem{ Enums::System::TwinPipe };
 	Enums::Series mSeries{ Enums::Series::Serie_3 };
 	int calculateKey() const;
-
-	AcArray<int> aSize{};
-	AcArray<double> aSegments{};
 
 protected:
 	static Adesk::UInt32 kCurrentVersionNumber;

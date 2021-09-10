@@ -25,6 +25,7 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "DRIPipelinePolyline.h"
+#include "DRIPipeLabel.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -46,6 +47,7 @@ public:
 
 		// TODO: Add your initialization code here
 		acrxRegisterService(DRIPIPELINEPOLYLINE_DBXSERVICE);
+		acrxRegisterService(DRIPIPELABEL_DBXSERVICE);
 		return (retCode);
 	}
 
@@ -53,7 +55,9 @@ public:
 	{
 		// TODO: Add your code here
 		delete acrxServiceDictionary->remove(DRIPIPELINEPOLYLINE_DBXSERVICE);
+		delete acrxServiceDictionary->remove(DRIPIPELABEL_DBXSERVICE);
 		deleteAcRxClass(DRIPipelinePolyline::desc());
+		deleteAcRxClass(DRIPipeLabel::desc());
 		// You *must* call On_kUnloadAppMsg here
 		AcRx::AppRetCode retCode = AcRxDbxApp::On_kUnloadAppMsg(pkt);
 

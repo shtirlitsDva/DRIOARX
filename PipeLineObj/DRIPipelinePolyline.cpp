@@ -308,8 +308,6 @@ Acad::ErrorStatus DRIPipelinePolyline::SetSeries(Enums::Series series)
 	return Acad::eOk;
 }
 
-
-
 //-----------------------------------------------------------------------------
 //----- AcDbObject protocols
 //- Dwg Filing protocol

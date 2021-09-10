@@ -93,6 +93,7 @@
     <ClInclude Include="meta_enum.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="TrigMacros.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>

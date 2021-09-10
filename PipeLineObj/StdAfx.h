@@ -26,6 +26,7 @@
 //-----------------------------------------------------------------------------
 #pragma once
 #define PIPELINEOBJ_MODULE
+#define PIPELINELABELOBJ_MODULE
 
 #ifndef _ALLOW_RTCc_IN_STL
 #define _ALLOW_RTCc_IN_STL
