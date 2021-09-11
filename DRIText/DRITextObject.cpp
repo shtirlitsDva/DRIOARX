@@ -23,38 +23,38 @@
 //----- DRIPipeLabel.cpp : Implementation of DRIPipeLabel
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
-#include "DRIPipeLabel.h"
+#include "DRITextObject.h"
 #include <math.h>
 #include "TrigMacros.h"
 
 //-----------------------------------------------------------------------------
-Adesk::UInt32 DRIPipeLabel::kCurrentVersionNumber = 1;
+Adesk::UInt32 DRIText::kCurrentVersionNumber = 1;
 
 //-----------------------------------------------------------------------------
 ACRX_DXF_DEFINE_MEMBERS(
-	DRIPipeLabel, AcDbText,
+	DRIText, AcDbText,
 	AcDb::kDHL_CURRENT, AcDb::kMReleaseCurrent,
-	AcDbProxyEntity::kNoOperation, DRIPIPELABEL,
-	DRIPIPELINEOBJAPP
+	AcDbProxyEntity::kNoOperation, DRITEXT,
+	DRITEXTOBJAPP
 	| Product Desc : A description for your object
 	| Company : Your company name
 	| WEB Address : Your company WEB site address
 )
 
 //-----------------------------------------------------------------------------
-DRIPipeLabel::DRIPipeLabel() : AcDbText()
+DRIText::DRIText() : AcDbText()
 {
 	assertWriteEnabled();
 	setJustification(AcTextAlignment::kTextAlignmentMiddleCenter);
 }
 
-DRIPipeLabel::~DRIPipeLabel()
+DRIText::~DRIText()
 {}
 
 //-----------------------------------------------------------------------------
 //----- AcDbObject protocols
 //- Dwg Filing protocol
-Acad::ErrorStatus DRIPipeLabel::dwgOutFields(AcDbDwgFiler * pFiler) const
+Acad::ErrorStatus DRIText::dwgOutFields(AcDbDwgFiler * pFiler) const
 {
 	assertReadEnabled();
 	//----- Save parent class information first.
@@ -62,7 +62,7 @@ Acad::ErrorStatus DRIPipeLabel::dwgOutFields(AcDbDwgFiler * pFiler) const
 	if (es != Acad::eOk)
 		return (es);
 	//----- Object version number needs to be saved first
-	if ((es = pFiler->writeUInt32(DRIPipeLabel::kCurrentVersionNumber)) != Acad::eOk)
+	if ((es = pFiler->writeUInt32(DRIText::kCurrentVersionNumber)) != Acad::eOk)
 		return (es);
 	//----- Output params
 	//.....
@@ -70,7 +70,7 @@ Acad::ErrorStatus DRIPipeLabel::dwgOutFields(AcDbDwgFiler * pFiler) const
 	return (pFiler->filerStatus());
 }
 
-Acad::ErrorStatus DRIPipeLabel::dwgInFields(AcDbDwgFiler * pFiler)
+Acad::ErrorStatus DRIText::dwgInFields(AcDbDwgFiler * pFiler)
 {
 	assertWriteEnabled();
 	//----- Read parent class information first.
@@ -81,7 +81,7 @@ Acad::ErrorStatus DRIPipeLabel::dwgInFields(AcDbDwgFiler * pFiler)
 	Adesk::UInt32 version = 0;
 	if ((es = pFiler->readUInt32(&version)) != Acad::eOk)
 		return (es);
-	if (version > DRIPipeLabel::kCurrentVersionNumber)
+	if (version > DRIText::kCurrentVersionNumber)
 		return (Acad::eMakeMeProxy);
 	//- Uncomment the 2 following lines if your current object implementation cannot
 	//- support previous version of that object.
@@ -94,7 +94,7 @@ Acad::ErrorStatus DRIPipeLabel::dwgInFields(AcDbDwgFiler * pFiler)
 }
 
 //- Dxf Filing protocol
-Acad::ErrorStatus DRIPipeLabel::dxfOutFields(AcDbDxfFiler * pFiler) const
+Acad::ErrorStatus DRIText::dxfOutFields(AcDbDxfFiler * pFiler) const
 {
 	assertReadEnabled();
 	//----- Save parent class information first.
@@ -105,7 +105,7 @@ Acad::ErrorStatus DRIPipeLabel::dxfOutFields(AcDbDxfFiler * pFiler) const
 	if (es != Acad::eOk)
 		return (es);
 	//----- Object version number needs to be saved first
-	if ((es = pFiler->writeUInt32(kDxfInt32, DRIPipeLabel::kCurrentVersionNumber)) != Acad::eOk)
+	if ((es = pFiler->writeUInt32(kDxfInt32, DRIText::kCurrentVersionNumber)) != Acad::eOk)
 		return (es);
 	//----- Output params
 	//.....
@@ -113,7 +113,7 @@ Acad::ErrorStatus DRIPipeLabel::dxfOutFields(AcDbDxfFiler * pFiler) const
 	return (pFiler->filerStatus());
 }
 
-Acad::ErrorStatus DRIPipeLabel::dxfInFields(AcDbDxfFiler * pFiler)
+Acad::ErrorStatus DRIText::dxfInFields(AcDbDxfFiler * pFiler)
 {
 	assertWriteEnabled();
 	//----- Read parent class information first.
@@ -130,7 +130,7 @@ Acad::ErrorStatus DRIPipeLabel::dxfInFields(AcDbDxfFiler * pFiler)
 		return (pFiler->filerStatus());
 	}
 	Adesk::UInt32 version = (Adesk::UInt32)rb.resval.rlong;
-	if (version > DRIPipeLabel::kCurrentVersionNumber)
+	if (version > DRIText::kCurrentVersionNumber)
 		return (Acad::eMakeMeProxy);
 	//- Uncomment the 2 following lines if your current object implementation cannot
 	//- support previous version of that object.
@@ -168,100 +168,100 @@ Acad::ErrorStatus DRIPipeLabel::dxfInFields(AcDbDxfFiler * pFiler)
 }
 
 //- SubXXX() methods (self notification)
-Acad::ErrorStatus DRIPipeLabel::subOpen(AcDb::OpenMode mode)
+Acad::ErrorStatus DRIText::subOpen(AcDb::OpenMode mode)
 {
 	return (AcDbText::subOpen(mode));
 }
 
-Acad::ErrorStatus DRIPipeLabel::subErase(Adesk::Boolean erasing)
+Acad::ErrorStatus DRIText::subErase(Adesk::Boolean erasing)
 {
 	return (AcDbText::subErase(erasing));
 }
 
-Acad::ErrorStatus DRIPipeLabel::subCancel()
+Acad::ErrorStatus DRIText::subCancel()
 {
 	return (AcDbText::subCancel());
 }
 
-Acad::ErrorStatus DRIPipeLabel::subClose()
+Acad::ErrorStatus DRIText::subClose()
 {
 	return (AcDbText::subClose());
 }
 
 //- Persistent reactor callbacks
-void DRIPipeLabel::openedForModify(const AcDbObject * pDbObj)
+void DRIText::openedForModify(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::openedForModify(pDbObj);
 }
 
-void DRIPipeLabel::cancelled(const AcDbObject * pDbObj)
+void DRIText::cancelled(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::cancelled(pDbObj);
 }
 
-void DRIPipeLabel::objectClosed(const AcDbObjectId objId)
+void DRIText::objectClosed(const AcDbObjectId objId)
 {
 	assertReadEnabled();
 	AcDbText::objectClosed(objId);
 }
 
-void DRIPipeLabel::goodbye(const AcDbObject * pDbObj)
+void DRIText::goodbye(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::goodbye(pDbObj);
 }
 
-void DRIPipeLabel::copied(const AcDbObject * pDbObj, const AcDbObject * pNewObj)
+void DRIText::copied(const AcDbObject * pDbObj, const AcDbObject * pNewObj)
 {
 	assertReadEnabled();
 	AcDbText::copied(pDbObj, pNewObj);
 }
 
-void DRIPipeLabel::erased(const AcDbObject * pDbObj, Adesk::Boolean bErasing)
+void DRIText::erased(const AcDbObject * pDbObj, Adesk::Boolean bErasing)
 {
 	assertReadEnabled();
 	AcDbText::erased(pDbObj, bErasing);
 }
 
-void DRIPipeLabel::modified(const AcDbObject * pDbObj)
+void DRIText::modified(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::modified(pDbObj);
 }
 
-void DRIPipeLabel::modifiedGraphics(const AcDbEntity * pDbEnt)
+void DRIText::modifiedGraphics(const AcDbEntity * pDbEnt)
 {
 	assertReadEnabled();
 	AcDbText::modifiedGraphics(pDbEnt);
 }
 
-void DRIPipeLabel::modifiedXData(const AcDbObject * pDbObj)
+void DRIText::modifiedXData(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::modifiedXData(pDbObj);
 }
 
-void DRIPipeLabel::subObjModified(const AcDbObject * pMainbObj, const AcDbObject * pSubObj)
+void DRIText::subObjModified(const AcDbObject * pMainbObj, const AcDbObject * pSubObj)
 {
 	assertReadEnabled();
 	AcDbText::subObjModified(pMainbObj, pSubObj);
 }
 
-void DRIPipeLabel::modifyUndone(const AcDbObject * pDbObj)
+void DRIText::modifyUndone(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::modifyUndone(pDbObj);
 }
 
-void DRIPipeLabel::reappended(const AcDbObject * pDbObj)
+void DRIText::reappended(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::reappended(pDbObj);
 }
 
-void DRIPipeLabel::unappended(const AcDbObject * pDbObj)
+void DRIText::unappended(const AcDbObject * pDbObj)
 {
 	assertReadEnabled();
 	AcDbText::unappended(pDbObj);
@@ -269,14 +269,14 @@ void DRIPipeLabel::unappended(const AcDbObject * pDbObj)
 
 //-----------------------------------------------------------------------------
 //----- AcDbEntity protocols
-Adesk::Boolean DRIPipeLabel::subWorldDraw(AcGiWorldDraw * mode)
+Adesk::Boolean DRIText::subWorldDraw(AcGiWorldDraw * mode)
 {
 	assertReadEnabled();
 	//------ Returning Adesk::kFalse here will force viewportDraw() call
 	return (Adesk::kFalse);
 }
 
-void DRIPipeLabel::subViewportDraw(AcGiViewportDraw * mode)
+void DRIText::subViewportDraw(AcGiViewportDraw * mode)
 {
 	assertReadEnabled();
 	AcGePoint3d orgn;
@@ -339,20 +339,20 @@ void DRIPipeLabel::subViewportDraw(AcGiViewportDraw * mode)
 	else AcDbText::subViewportDraw(mode);
 }
 
-Adesk::UInt32 DRIPipeLabel::subViewportDrawLogicalFlags(AcGiViewportDraw * vd)
+Adesk::UInt32 DRIText::subViewportDrawLogicalFlags(AcGiViewportDraw * vd)
 {
 	assertReadEnabled();
 	return (AcDbText::subViewportDrawLogicalFlags(vd));
 }
 
-Adesk::UInt32 DRIPipeLabel::subSetAttributes(AcGiDrawableTraits * traits)
+Adesk::UInt32 DRIText::subSetAttributes(AcGiDrawableTraits * traits)
 {
 	assertReadEnabled();
 	return (AcDbText::subSetAttributes(traits));
 }
 
 //- Grip points protocol
-Acad::ErrorStatus DRIPipeLabel::subGetGripPoints(
+Acad::ErrorStatus DRIText::subGetGripPoints(
 	AcGePoint3dArray & gripPoints, AcDbIntArray & osnapModes, AcDbIntArray & geomIds
 ) const
 {
@@ -363,7 +363,7 @@ Acad::ErrorStatus DRIPipeLabel::subGetGripPoints(
 	return (AcDbText::subGetGripPoints(gripPoints, osnapModes, geomIds));
 }
 
-Acad::ErrorStatus DRIPipeLabel::subMoveGripPointsAt(const AcDbIntArray & indices, const AcGeVector3d & offset)
+Acad::ErrorStatus DRIText::subMoveGripPointsAt(const AcDbIntArray & indices, const AcGeVector3d & offset)
 {
 	assertWriteEnabled();
 	//----- This method is never called unless you return eNotImplemented 
@@ -372,7 +372,7 @@ Acad::ErrorStatus DRIPipeLabel::subMoveGripPointsAt(const AcDbIntArray & indices
 	return (AcDbText::subMoveGripPointsAt(indices, offset));
 }
 
-Acad::ErrorStatus DRIPipeLabel::subGetGripPoints(
+Acad::ErrorStatus DRIText::subGetGripPoints(
 	AcDbGripDataPtrArray & grips, const double curViewUnitSize, const int gripSize,
 	const AcGeVector3d & curViewDir, const int bitflags
 ) const
@@ -385,7 +385,7 @@ Acad::ErrorStatus DRIPipeLabel::subGetGripPoints(
 	return (AcDbText::subGetGripPoints(grips, curViewUnitSize, gripSize, curViewDir, bitflags));
 }
 
-Acad::ErrorStatus DRIPipeLabel::subMoveGripPointsAt(
+Acad::ErrorStatus DRIText::subMoveGripPointsAt(
 	const AcDbVoidPtrArray & gripAppData, const AcGeVector3d & offset,
 	const int bitflags
 )

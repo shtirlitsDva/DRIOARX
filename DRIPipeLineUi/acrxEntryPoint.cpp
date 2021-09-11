@@ -25,7 +25,7 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "../PipeLineObj/DRIPipelinePolyline.h"
-#include "../PipeLineObj/DRIPipeLabel.h"
+#include "../DRIText/DRITextObject.h"
 #include "DRILineJig.h"
 #include "tchar.h"
 #include "Utility.h"
@@ -110,7 +110,7 @@ public:
 			if (acedGetString(1, _T("\nEnter text: "), text) != RTNORM)
 				return;
 
-			AcDbObjectPointer<DRIPipeLabel> drilabel;
+			AcDbObjectPointer<DRIText> drilabel;
 			drilabel.create();
 			drilabel->assertWriteEnabled();
 			drilabel->setPosition(asPnt3d(pt));
