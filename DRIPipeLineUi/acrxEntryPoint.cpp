@@ -25,10 +25,10 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "../PipeLineObj/DRIPipelinePolyline.h"
-#include "../DRIText/DRITextObject.h"
 #include "DRILineJig.h"
 #include "tchar.h"
 #include "Utility.h"
+#include "../DRIText/DRITextObject.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
