@@ -43,7 +43,10 @@ ACRX_DXF_DEFINE_MEMBERS(
 
 //-----------------------------------------------------------------------------
 DRIPipeLabel::DRIPipeLabel() : AcDbText()
-{}
+{
+	assertWriteEnabled();
+	setJustification(AcTextAlignment::kTextAlignmentMiddleCenter);
+}
 
 DRIPipeLabel::~DRIPipeLabel()
 {}
@@ -276,30 +279,55 @@ Adesk::Boolean DRIPipeLabel::subWorldDraw(AcGiWorldDraw * mode)
 void DRIPipeLabel::subViewportDraw(AcGiViewportDraw * mode)
 {
 	assertReadEnabled();
-	//AcGePoint2d pt1, pt2;
-	//mode->viewport().getViewportDcCorners(pt1, pt2);
-
-	//mode->viewport().viewportId()
-
-	//AcGePoint3d pts[2] = { AcGePoint3d(pt1.x,pt1.y,0), AcGePoint3d(pt2.x,pt2.y,0) };
-	//mode->geometry().worldLine(pts);
 	AcGePoint3d orgn;
 	AcGeVector3d xa, ya, za;
 	AcGeMatrix3d transform;
 	mode->viewport().getEyeToWorldTransform(transform);
-	//AcGeVector3d rotVec{ 0.0,0.0,0.0 };
 	transform.getCoordSystem(orgn, xa, ya, za);
-	//AcString text; text.format(_T("%.3f %.3f %.3f %.3f ->"), orgn.x, orgn.y, orgn.z);
-	AcString text; text.format(_T("%.2f %.2f -> %.6q2"), RTD(acos(xa.x)), RTD(asin(xa.y)), this->rotation());
-	//AcString text2; text2.format(_T("%.3f %.3f %.3f %.3f ->"), ya.x, ya.y, ya.z);
-	//AcString text3; text3.format(_T("%.3f %.3f %.3f %.3f"), za.x, za.y, za.z);
-	//text = text + text1 + text2 + text3;
-	
-	AcGeVector3d displ{ AcGeVector3d(1.0,1.0,0.0) };
-	mode->geometry().text(position() + displ.normalize() * 5.0, AcGeVector3d::kZAxis, AcGeVector3d::kXAxis,
-		1.2, 1.0, 0.0, text);
 
-	AcDbText::subViewportDraw(mode);
+	double lLimit, uLimit, vpRotCos, vpRotSin;
+	vpRotCos = acos(xa.x);
+	vpRotSin = asin(xa.y);
+	double rot = rotation();
+
+	lLimit = (PI / 2) - vpRotCos;
+	uLimit = (1.5 * PI) - vpRotCos;
+
+	bool toRotate = false;
+
+	if (vpRotCos < PI / 2 && vpRotSin <= 0)
+	{
+		if (rot > lLimit && rot < uLimit) toRotate = true;
+	}
+	else if (vpRotCos >= PI / 2 && vpRotCos < PI && vpRotSin < 0)
+	{
+		if (rot >= 0 && rot < uLimit) toRotate = true;
+		else if (rot > lLimit + 2 * PI) toRotate = true;
+	}
+	else if (vpRotCos >= PI / 2 && vpRotCos <= PI && vpRotSin >= -0.0001)
+	{
+		lLimit = (PI / 2) - vpRotSin - PI;
+		uLimit = (1.5 * PI) - vpRotSin - PI;
+		if (rot > lLimit && rot < uLimit) toRotate = true;
+		else if (rot > lLimit + 2 * PI) toRotate = true;
+	}
+	else if (vpRotCos < PI / 2 && vpRotSin > 0)
+	{
+		lLimit = vpRotSin + PI / 2;
+		uLimit = vpRotSin + 3 * PI / 2;
+		if (rot > lLimit && rot < uLimit) toRotate = true;
+	}
+
+	//AcString text; text.format(_T("vpRot:%.8f:%.8f --> L: %.3f > %.3f U: %.3f < %.3f"),
+	//	vpRotCos, vpRotSin, rot, lLimit, rot, uLimit);
+	//AcGeVector3d dirPerp{ AcGeVector3d(cos(rotation() + PI / 2),sin(rotation() + PI / 2),0.0) };
+	//mode->geometry().text(position() + dirPerp.normalize() * 5.0, AcGeVector3d::kZAxis, dirPerp,//AcGeVector3d::kXAxis,
+	//	1.2, 1.0, 0.0, text);
+
+	if (toRotate)	{		AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) };		AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI / 2),sin(rot + PI / 2),0.0) };		AcString text = textString();		AcGiTextStyle style;		fromAcDbTextStyle(style, textStyle());		AcGePoint2d extents = style.extents(textString(), Adesk::kFalse, text.length(), Adesk::kTrue);		mode->geometry().text(position() + dir * extents.x + dirPerp * extents.y,
+			AcGeVector3d::kZAxis, dir * -1, height(), 1.0, 0.0, text);
+	}
+	else AcDbText::subViewportDraw(mode);
 }
 
 Adesk::UInt32 DRIPipeLabel::subViewportDrawLogicalFlags(AcGiViewportDraw * vd)

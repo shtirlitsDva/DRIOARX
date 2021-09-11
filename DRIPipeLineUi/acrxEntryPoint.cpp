@@ -28,6 +28,7 @@
 #include "../PipeLineObj/DRIPipeLabel.h"
 #include "DRILineJig.h"
 #include "tchar.h"
+#include "Utility.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -69,27 +70,32 @@ public:
 
 	static void DRIPipelineUiTestRotation()
 	{
-		ads_name ename;
-		ads_point pt;
-		if (acedEntSel(_T("Select label to set rotation: "), ename, pt) != RTNORM)
-			return;
+		double step = 2 * PI / 36;
+		double angle = 0;
+		int counter = 0;
 
-		AcDbObjectId id;
-		if (acdbGetObjectId(id, ename) != Acad::eOk)
-			return;
-
-		AcDbObjectPointer<DRIPipeLabel> drilabel;
-		if (drilabel.open(id, AcDb::kForWrite) != Acad::eOk)
+		while (true)
 		{
-			acutPrintf(_T("\nNot a pipeline!"));
-			return;
-		}
+			ads_name ename;
+			ads_point pt;
+			if (acedEntSel(_T("Select view to set rotation: "), ename, pt) != RTNORM)
+				return;
 
-		/*drilabel->assertWriteEnabled();
-		drilabel->myRotation = drilabel->rotation();
-		acutPrintf(_T("Rotation: %.6q20"), drilabel->rotation());
-		acutPrintf(_T("myRotation: %.6q20"), drilabel->myRotation);
-		drilabel->draw();*/
+			AcDbObjectId id;
+			if (acdbGetObjectId(id, ename) != Acad::eOk)
+				return;
+
+			AcDbObjectPointer<AcDbViewport> vp;
+			if (vp.open(id, AcDb::kForWrite) != Acad::eOk)
+			{
+				acutPrintf(_T("\nNot a viewport!"));
+				continue;
+			}
+			angle = counter * step;
+			counter++;
+
+			vp->setTwistAngle(angle);
+		}
 	}
 
 	static void DRIPipelineUiTestLabel()
