@@ -55,8 +55,14 @@ class DLLIMPEXP DRIText : public AcDbText
 public:
 	ACRX_DECLARE_MEMBERS(DRIText);
 
+	/*AcGePoint2d Extents() const;
+	Acad::ErrorStatus SetExtents(const AcGePoint2d extents);*/
+
 protected:
 	static Adesk::UInt32 kCurrentVersionNumber;
+
+private:
+	//AcGePoint2d extents;
 
 public:
 	DRIText();

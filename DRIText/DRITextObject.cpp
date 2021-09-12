@@ -41,8 +41,21 @@ ACRX_DXF_DEFINE_MEMBERS(
 	| WEB Address : Your company WEB site address
 )
 
+//AcGePoint2d DRIText::Extents() const
+//{
+//	assertReadEnabled();
+//	return this->extents;
+//}
+//
+//Acad::ErrorStatus DRIText::SetExtents(const AcGePoint2d extents)
+//{
+//	assertWriteEnabled();
+//	this->extents = extents;
+//	return Acad::eOk;
+//}
+
 //-----------------------------------------------------------------------------
-DRIText::DRIText() : AcDbText()
+DRIText::DRIText() : AcDbText()//, extents()
 {
 	assertWriteEnabled();
 	setJustification(AcTextAlignment::kTextAlignmentMiddleCenter);
@@ -67,6 +80,8 @@ Acad::ErrorStatus DRIText::dwgOutFields(AcDbDwgFiler * pFiler) const
 	//----- Output params
 	//.....
 
+	//pFiler->writePoint2d(Extents());
+
 	return (pFiler->filerStatus());
 }
 
@@ -89,6 +104,10 @@ Acad::ErrorStatus DRIText::dwgInFields(AcDbDwgFiler * pFiler)
 	//	return (Acad::eMakeMeProxy) ;
 	//----- Read params
 	//.....
+
+	/*AcGePoint2d* pt = new AcGePoint2d();
+	pFiler->readPoint2d(pt);
+	SetExtents(*pt);*/
 
 	return (pFiler->filerStatus());
 }
@@ -272,67 +291,96 @@ void DRIText::unappended(const AcDbObject * pDbObj)
 Adesk::Boolean DRIText::subWorldDraw(AcGiWorldDraw * mode)
 {
 	assertReadEnabled();
+	/*AcString text = textString();
+	AcGiTextStyle style;
+	fromAcDbTextStyle(style, this->textStyle());
+	style.loadStyleRec();
+	AcGePoint2d extents = style.extents(textString(), Adesk::kFalse, text.length(), Adesk::kTrue, mode);
+	assertWriteEnabled();*/
+
+	if (mode)
+	{
+		AcGeMatrix3d matrix;
+		mode->geometry().getModelToWorldTransform(matrix);
+	}
+
 	//------ Returning Adesk::kFalse here will force viewportDraw() call
 	return (Adesk::kFalse);
 }
 
 void DRIText::subViewportDraw(AcGiViewportDraw * mode)
 {
+	//See this article in case of problems with print
+	//https://adn-cis.org/risovanie-gorizontalnogo-teksta-v-sobstvennom-primitive.html
+	//http://adndevblog.typepad.com/autocad/2012/08/draw-horizontal-text-in-custom-entity.html
 	assertReadEnabled();
 	AcGePoint3d orgn;
 	AcGeVector3d xa, ya, za;
+	AcGeVector3d upVect;
 	AcGeMatrix3d transform;
+	//mode->viewport().getCameraUpVector(upVect);
 	mode->viewport().getEyeToWorldTransform(transform);
 	transform.getCoordSystem(orgn, xa, ya, za);
 
-	double lLimit, uLimit, vpRotCos, vpRotSin;
-	vpRotCos = acos(xa.x);
-	vpRotSin = asin(xa.y);
+	double lLimit, uLimit;
 	double rot = rotation();
+	double vpRot = atan2(xa.y, xa.x);
+	//double vpRot = atan2(upVect.x, upVect.y);
+	//Counterclockwise rotation
+	if (vpRot < 0) vpRot *= -1;
+	else vpRot = 2.0 * PI - vpRot;
+	//Limit modifiers
+	double lLimMod = PI * 0.5;
+	double uLimMod = PI * 1.5;
 
-	lLimit = (PI / 2) - vpRotCos;
-	uLimit = (1.5 * PI) - vpRotCos;
+	//When plotting, works, probably, only for landscape setups
+	if (mode->context()->isPlotGeneration())
+	{
+		vpRot += 0.5 * PI;
+		//lLimMod += 0.5 * PI; uLimMod += 0.5 * PI;
+	}
+	else
+	{
+		//vpRot += 0.5 * PI;
+	}
+
+	lLimit = lLimMod - vpRot;
+	uLimit = uLimMod - vpRot;
+	if (lLimit < 0) lLimit += 2.0 * PI;
+	if (uLimit <= 0) uLimit += 2.0 * PI;
 
 	bool toRotate = false;
-
-	if (vpRotCos < PI / 2 && vpRotSin <= 0)
+	//AcString helperText;
+	//General case, quadrant I and IV
+	if ((vpRot < (PI * 0.5)) || (vpRot >= (1.5 * PI)))
 	{
+		/*helperText.format(_T("vpRot_1: %.3f --> L: %.3q2 > %.3q2 && U: %.3q2 < %.3q2"),
+			vpRot, rot, lLimit, rot, uLimit);*/
 		if (rot > lLimit && rot < uLimit) toRotate = true;
 	}
-	else if (vpRotCos >= PI / 2 && vpRotCos < PI && vpRotSin < 0)
+	//General case, quadrant II and III
+	else if ((vpRot >= (PI * 0.5)) && (vpRot < (1.5 * PI)))
 	{
-		if (rot >= 0 && rot < uLimit) toRotate = true;
-		else if (rot > lLimit + 2 * PI) toRotate = true;
-	}
-	else if (vpRotCos >= PI / 2 && vpRotCos <= PI && vpRotSin >= -0.0001)
-	{
-		lLimit = (PI / 2) - vpRotSin - PI;
-		uLimit = (1.5 * PI) - vpRotSin - PI;
-		if (rot > lLimit && rot < uLimit) toRotate = true;
-		else if (rot > lLimit + 2 * PI) toRotate = true;
-	}
-	else if (vpRotCos < PI / 2 && vpRotSin > 0)
-	{
-		lLimit = vpRotSin + PI / 2;
-		uLimit = vpRotSin + 3 * PI / 2;
-		if (rot > lLimit && rot < uLimit) toRotate = true;
+		//helperText.format(_T("vpRot_2: %.3f --> L: %.3q2 > %.3q2 || U: %.3q2 < %.3q2"),
+		//	vpRot, rot, lLimit, rot, uLimit);
+		if (rot < uLimit || rot > lLimit) toRotate = true;
 	}
 
-	//AcString text; text.format(_T("vpRot:%.8f:%.8f --> L: %.3f > %.3f U: %.3f < %.3f"),
-	//	vpRotCos, vpRotSin, rot, lLimit, rot, uLimit);
-	//AcGeVector3d dirPerp{ AcGeVector3d(cos(rotation() + PI / 2),sin(rotation() + PI / 2),0.0) };
+	//AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI * 0.5),sin(rot + PI * 0.5),0.0) };
 	//mode->geometry().text(position() + dirPerp.normalize() * 5.0, AcGeVector3d::kZAxis, dirPerp,//AcGeVector3d::kXAxis,
-	//	1.2, 1.0, 0.0, text);
+	//	1.2, 1.0, 0.0, helperText);
 
 	if (toRotate)
 	{
-		AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) };
-		AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI / 2),sin(rot + PI / 2),0.0) };
+		AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) }; dir.normalize();
+		AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI * 0.5),sin(rot + PI * 0.5),0.0) }; dirPerp.normalize();
 		AcString text = textString();
 		AcGiTextStyle style;
-		fromAcDbTextStyle(style, textStyle());
+		fromAcDbTextStyle(style, this->textStyle());
+		style.loadStyleRec();
 		AcGePoint2d extents = style.extents(textString(), Adesk::kFalse, text.length(), Adesk::kTrue);
-
+		//AcString ext; ext.format(_T(" *"));//ext.format(_T(" x: %.3f, y: %.3f"), extents.x, extents.y);
+		//text.append(ext);
 		mode->geometry().text(position() + dir * extents.x + dirPerp * extents.y,
 			AcGeVector3d::kZAxis, dir * -1, height(), 1.0, 0.0, text);
 	}

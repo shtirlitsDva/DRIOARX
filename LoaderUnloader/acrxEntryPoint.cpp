@@ -135,6 +135,7 @@ public:
 	static void DRILoaderUnloaderLLoad()
 	{
 		acrxLoadModule(_T("DRIPipeLineObj.dbx"), true);
+		acrxLoadModule(_T("DRIDRIText.dbx"), true);
 		acedArxLoad(_T("DRIDRIPipeLineUi.arx"));
 		//acrxLoadModule(_T("DRIDriPipelineUiProject.arx")); */
 		/*acedArxLoad(_T("DRIPipelineProject.dbx"));
@@ -144,6 +145,7 @@ public:
 	static void DRILoaderUnloaderLLoadBg()
 	{
 		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
+		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIText.dbx"), true);
 		//acedArxLoad(_T("X:\\26 ObjectArx\\ObjectArx2022Training\\Step01\\x64\\Debug\\DRIPipelineProject.dbx"));
 		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
 	}
@@ -151,6 +153,7 @@ public:
 	static void DRILoaderUnloaderULoad()
 	{
 		acrxUnloadModule(_T("DRIPipeLineObj.dbx"));
+		acrxUnloadModule(_T("DRIDRIText.dbx"));
 		//acedArxUnload(_T("DRIPipelineProject.dbx"));
 		acedArxUnload(_T("DRIDRIPipeLineUi.arx"));
 	}
