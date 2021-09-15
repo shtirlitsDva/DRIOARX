@@ -100,9 +100,9 @@ namespace Isoplus
 // 1	Logstor		1	BondedPipeSystem	1	SinglePipe	1	Serie_1
 // 2	Isoplus		2	PexFlextra			2	TwinPipe	2	Serie_2
 // 3	Starpipe	3	AluFlextra			3	DoublePipe	3	Serie_3
-//					4	SteelFlex
-//					5	CuFlex
-//					6	CopperPipeSystem
+// 					4	SteelFlex
+// 					5	CuFlex
+// 					6	CopperPipeSystem
 
 namespace LookUps
 {

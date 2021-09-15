@@ -17,6 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with EPlineTut.  If not, see <http://www.gnu.org/licenses/>.
 #include "StdAfx.h"
+#include <unordered_map>
+
 #pragma once
 
 #define PI 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899

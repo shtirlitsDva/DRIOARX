@@ -67,7 +67,31 @@ public:
 
 	virtual void RegisterServerComponents()
 	{}
+	static void DRIPipelineUiReplaceTextWithDRIText()
+	{
+		AcDbObjectIdArray* idArray = new AcDbObjectIdArray();
+		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
+		AcDbObjectId modelSpaceId;
+		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
+		AcDbBlockTableRecordPointer pBTRecord(modelSpaceId, AcDb::kForRead, true);
 
+		Acad::ErrorStatus es;
+		AcDbBlockTableRecordIterator* pBtrIter;
+		if ((es = pBTRecord->newIterator(pBtrIter)) != Acad::eOk)
+		{
+			acutPrintf(_T("\nCouldn't create Model Space iterator."));
+			return;
+		}
+
+		AcDbObjectId id;
+		for (pBtrIter->start(); !pBtrIter->done(); pBtrIter->step())
+		{
+			if ((es = pBtrIter->getEntityId(id)) != Acad::eOk) continue;
+			if (id.objectClass() == AcDbText::desc()) idArray->append(id);
+		}
+
+		acutPrintf(_T("\nThere are %d objects in id array!"), idArray->length());
+	}
 	static void DRIPipelineUiTestRotation()
 	{
 		double step = 2 * PI / 36;
@@ -97,7 +121,6 @@ public:
 			vp->setTwistAngle(angle);
 		}
 	}
-
 	static void DRIPipelineUiTestLabel()
 	{
 		while (true)
@@ -553,4 +576,5 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ChangeSize, _cs, AC
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ConvertPipes, _convp, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestLabel, _testlabel, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestRotation, _testrot, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ReplaceTextWithDRIText, _rpltxt, ACRX_CMD_MODAL, NULL)
 
