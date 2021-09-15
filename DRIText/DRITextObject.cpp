@@ -298,11 +298,11 @@ Adesk::Boolean DRIText::subWorldDraw(AcGiWorldDraw * mode)
 	AcGePoint2d extents = style.extents(textString(), Adesk::kFalse, text.length(), Adesk::kTrue, mode);
 	assertWriteEnabled();*/
 
-	if (mode)
+	/*if (mode)
 	{
 		AcGeMatrix3d matrix;
 		mode->geometry().getModelToWorldTransform(matrix);
-	}
+	}*/
 
 	//------ Returning Adesk::kFalse here will force viewportDraw() call
 	return (Adesk::kFalse);
