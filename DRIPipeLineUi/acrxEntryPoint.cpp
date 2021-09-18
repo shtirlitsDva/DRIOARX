@@ -69,15 +69,15 @@ public:
 	{}
 	static void DRIPipelineUiReplaceTextWithDRIText()
 	{
-		AcDbObjectIdArray* idArray = new AcDbObjectIdArray();
+		AcDbObjectIdArray ids{};
 		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
 		AcDbObjectId modelSpaceId;
 		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
-		AcDbBlockTableRecordPointer pBTRecord(modelSpaceId, AcDb::kForRead, true);
+		AcDbBlockTableRecordPointer modelSpace(modelSpaceId, AcDb::kForRead, true);
 
 		Acad::ErrorStatus es;
 		AcDbBlockTableRecordIterator* pBtrIter;
-		if ((es = pBTRecord->newIterator(pBtrIter)) != Acad::eOk)
+		if ((es = modelSpace->newIterator(pBtrIter)) != Acad::eOk)
 		{
 			acutPrintf(_T("\nCouldn't create Model Space iterator."));
 			return;
@@ -87,10 +87,39 @@ public:
 		for (pBtrIter->start(); !pBtrIter->done(); pBtrIter->step())
 		{
 			if ((es = pBtrIter->getEntityId(id)) != Acad::eOk) continue;
-			if (id.objectClass() == AcDbText::desc()) idArray->append(id);
+			if (id.objectClass() == AcDbText::desc()) ids.append(id);
 		}
 
-		acutPrintf(_T("\nThere are %d objects in id array!"), idArray->length());
+		acutPrintf(_T("\nThere are %d objects in id array!"), ids.length());
+
+		modelSpace->upgradeOpen(); //Upgrade for write
+
+		for (auto curId = ids.begin(); curId != ids.end(); ++curId)
+		{
+			//Current distance
+			//auto i = std::distance(idArray->begin(), it);
+
+			AcDbObjectPointer<AcDbText> originalText;
+			originalText.open(*curId, AcDb::kForWrite);
+
+			AcDbObjectPointer<DRIText> newText;
+			newText.create();
+
+			newText->setAlignmentPoint(originalText->alignmentPoint());
+			newText->setPosition(originalText->position());
+			newText->setLayer(originalText->layer());
+			newText->setTextString(originalText->textString());
+			newText->setRotation(originalText->rotation());
+			newText->setHeight(originalText->height());
+			newText->setHorizontalMode(originalText->horizontalMode());
+			newText->setVerticalMode(originalText->verticalMode());
+
+			if (modelSpace->appendAcDbEntity(newText) == Acad::eOk)
+			{
+				originalText->upgradeOpen();
+				originalText->erase(true);
+			}
+		}
 	}
 	static void DRIPipelineUiTestRotation()
 	{
