@@ -77,7 +77,9 @@
   <ItemGroup>
     <ClCompile Include="acrxEntryPoint.cpp" />
     <ClCompile Include="DRIPipeLabelGroup.cpp" />
+    <ClCompile Include="DRIPipelineLabel.cpp" />
     <ClCompile Include="DRIPipelinePolyline.cpp" />
+    <ClCompile Include="DRIPipelineSegment.cpp" />
     <ClCompile Include="PipeLineObj.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -87,7 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DRIPipeLabelGroup.h" />
+    <ClInclude Include="DRIPipelineLabel.h" />
     <ClInclude Include="DRIPipelinePolyline.h" />
+    <ClInclude Include="DRIPipelineSegment.h" />
     <ClInclude Include="meta_enum.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />

@@ -33,6 +33,12 @@
     <ClCompile Include="DRIPipeLabelGroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DRIPipelineSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DRIPipelineLabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TrigMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DRIPipelineSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DRIPipelineLabel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
