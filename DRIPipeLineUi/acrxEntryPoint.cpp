@@ -29,6 +29,7 @@
 #include "tchar.h"
 #include "Utility.h"
 #include "../DRIText/DRITextObject.h"
+#include "../DRIText/DRIAttributeDef.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -120,6 +121,53 @@ public:
 				originalText->erase(true);
 			}
 		}
+	}
+	static void DRIPipelineUiReplaceAttributeWithDRIAttribute()
+	{
+		AcDbObjectIdArray ids{};
+		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
+		AcDbObjectId modelSpaceId;
+		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
+		AcDbBlockTableRecordPointer modelSpace(modelSpaceId, AcDb::kForRead, true);
+
+		Acad::ErrorStatus es;
+		//Existing object is selected for exchange
+		ads_name ename;
+		ads_point pt;
+		if (acedEntSel(_T("Select attribute definition to exchange: "), ename, pt) != RTNORM)
+			return;
+
+		AcDbObjectId id;
+		if (acdbGetObjectId(id, ename) != Acad::eOk) return;
+
+		modelSpace->upgradeOpen(); //Upgrade for write
+
+		AcDbObjectPointer<AcDbAttributeDefinition> originalAttDef;
+		originalAttDef.open(id, AcDb::kForWrite);
+
+		AcDbObjectPointer<DRIAttributeDef> newAttDef;
+		newAttDef.create();
+
+		newAttDef->setAlignmentPoint(originalAttDef->alignmentPoint());
+		newAttDef->setPosition(originalAttDef->position());
+		newAttDef->setPropertiesFrom(originalAttDef, true);
+		//newAttDef->setLayer(originalAttDef->layer());
+		newAttDef->setTextString(originalAttDef->textString());
+		newAttDef->setRotation(originalAttDef->rotation());
+		newAttDef->setHeight(originalAttDef->height());
+		newAttDef->setHorizontalMode(originalAttDef->horizontalMode());
+		newAttDef->setVerticalMode(originalAttDef->verticalMode());
+
+		AcString tag;
+		originalAttDef->tag(tag);
+		newAttDef->setTag(tag);
+
+		if (modelSpace->appendAcDbEntity(newAttDef) == Acad::eOk)
+		{
+			originalAttDef->upgradeOpen();
+			originalAttDef->erase(true);
+		}
+
 	}
 	static void DRIPipelineUiTestRotation()
 	{
@@ -606,4 +654,6 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ConvertPipes, _conv
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestLabel, _testlabel, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, TestRotation, _testrot, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ReplaceTextWithDRIText, _rpltxt, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRIPipeLineUiApp, DRIPipelineUi, ReplaceAttributeWithDRIAttribute, _rplattdef, ACRX_CMD_MODAL, NULL)
+
 

@@ -116,6 +116,7 @@ protected:
 
 };
 
+//This thing must match everywhere!!!!
 #ifdef DRITEXTOBJ_MODULE
 ACDB_REGISTER_OBJECT_ENTRY_AUTO(DRIText)
 #endif
