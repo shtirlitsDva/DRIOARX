@@ -48,7 +48,7 @@
   </ImportGroup>
   <PropertyGroup Label="Configuration">
     <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v141'">v141</PlatformToolset>
-    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v142'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v142'">v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
