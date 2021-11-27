@@ -504,14 +504,25 @@ public:
 			//Existing object is selected for continuation
 			ads_name ename;
 			ads_point pt;
-			if (acedEntSel(_T("Select (poly)line to convert: "), ename, pt) != RTNORM)
+			if (acedEntSel(_T("Select polyline to convert: "), ename, pt) != RTNORM)
 			{
+				//If polyline selection fails somehow, the dripl must be erased if vertices < 2
 				//Plines with vertex counts of less than 2 may not be posted to database
 				if (dripl->numVerts() < 2)
 				{
+					acutPrintf(_T("DRIPL has less vertices than 2! Erasing..."));
 					dripl->erase(true);
+					return;
 				}
-				return;
+				int* result{};
+				acedGetInt(_T("1"), result);
+				dripl->assertWriteEnabled();
+				acedGetInt(_T("2"), result);
+				acutPrintf(_T("aSize: %d, aSegments: %d"),
+					dripl->aSize.logicalLength(),
+					dripl->aSegments.logicalLength());
+				acedGetInt(_T("3"), result);
+				break;
 			}
 
 			AcDbObjectId plineId;
