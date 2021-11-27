@@ -498,6 +498,7 @@ public:
 		}
 
 		bool ContinueConvertLoop = true;
+		bool firstIteration = true;
 
 		while (ContinueConvertLoop)
 		{
@@ -514,14 +515,6 @@ public:
 					dripl->erase(true);
 					return;
 				}
-				int* result{};
-				acedGetInt(_T("1"), result);
-				dripl->assertWriteEnabled();
-				acedGetInt(_T("2"), result);
-				acutPrintf(_T("aSize: %d, aSegments: %d"),
-					dripl->aSize.logicalLength(),
-					dripl->aSegments.logicalLength());
-				acedGetInt(_T("3"), result);
 				break;
 			}
 
@@ -567,6 +560,17 @@ public:
 					dripl->addVertexAt(dripl->numVerts(), pt2d, bulge, 0, 0);
 				}
 			}
+
+			if (firstIteration)
+			{
+				int pipeSize = pline->la
+
+			}
+			else
+			{
+
+			}
+
 			dripl->UpdateLastSegment();
 			dripl->draw();
 		}

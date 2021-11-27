@@ -104,6 +104,7 @@
     <ClInclude Include="ArcCalcs.h" />
     <ClInclude Include="DocData.h" />
     <ClInclude Include="DRILineJig.h" />
+    <ClInclude Include="meta_enum.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="Utility.h" />

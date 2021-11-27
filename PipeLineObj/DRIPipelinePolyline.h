@@ -57,6 +57,7 @@ public:
 	void InitializeSegments();
 	void InsertSize(int newSize, ads_point pt);
 	void ChangeSize(int newSize, ads_point pt);
+	void ChangeSize(int newSize, int idx);
 	void ConsolidateSizes();
 	void UpdateLastSegment();
 	void AddSize(int sizeToAdd);

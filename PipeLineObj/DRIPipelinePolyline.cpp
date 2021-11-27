@@ -145,7 +145,7 @@ void DRIPipelinePolyline::ChangeSize(int newSize, ads_point pt)
 
 	//Handle a special case of only one size at all
 	//Here the size is inserted after the start of the first one
-	
+
 	if (aSegments.length() == 1)
 	{
 		aSize.append(newSize);
@@ -164,12 +164,25 @@ void DRIPipelinePolyline::ChangeSize(int newSize, ads_point pt)
 	}
 }
 
+/// <summary>
+/// Change a size directly by specifying an index
+/// </summary>
+void DRIPipelinePolyline::ChangeSize(int newSize, int idx)
+{
+	assertWriteEnabled();
+	//Function assumes that segment tracking is in valid state
+	aSize[idx] = newSize;
+
+	//Always consolidate after size change
+	ConsolidateSizes();
+}
+
 void DRIPipelinePolyline::ConsolidateSizes()
 {//Assumes state is valid
 	assertWriteEnabled();
 	//If length()==1 abort or there'll be out of bounds
 	if (aSize.length() == 1) return;
-	
+
 	int length = aSize.length();
 	//Forward looking -> length()-1
 	for (int i = 0; i < length - 1; i++)
@@ -199,7 +212,7 @@ void DRIPipelinePolyline::AddSize(int newSize)
 		length = 0;
 
 	AcGeTol* tol = new AcGeTol();
-	
+
 	//if ((aSegments[segmentsLength - 1] - length) <= tol->equalPoint())
 	//{
 	//	//Means the size has just been added
@@ -226,7 +239,7 @@ void DRIPipelinePolyline::UpdateLastSegment()
 	double length;
 	if (getDistAtParam(endParam, length) != Acad::eOk)
 		length = 0;
-	
+
 	//The number of sizes corresponds to number of segments
 	//Updating last segment
 	if (sizeLength == segmentsLength)
@@ -594,8 +607,6 @@ Adesk::Boolean DRIPipelinePolyline::subWorldDraw(AcGiWorldDraw * mode)
 	assertReadEnabled();
 	if (mode)
 	{
-		UpdateLastSegment();
-
 		{
 			/// <summary>
 			/// Draws pipe size labels at specified interval.
