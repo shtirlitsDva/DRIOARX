@@ -1,7 +1,5 @@
 // Utility.h
 #include "StdAfx.h"
-#include <unordered_map>
-#include "meta_enum.hpp"
 
 #pragma once
 
@@ -19,25 +17,5 @@
 
 namespace Schedule
 {
-	meta_enum_class(
-		PipeDnSizes,
-		uint16_t,
-		Invalid = 999,
-		DN32 = 32,
-		DN40 = 40,
-		DN50 = 50,
-		DN65 = 65,
-		DN80 = 80,
-		DN100 = 100,
-		DN125 = 125,
-		DN150 = 150,
-		DN200 = 200,
-		DN250 = 250,
-		DN300 = 300,
-		DN350 = 350,
-		DN400 = 400,
-		DN450 = 450,
-		DN500 = 500,
-		DN600 = 600
-	);
+	uint16_t resolveDn(AcString layerName);
 }

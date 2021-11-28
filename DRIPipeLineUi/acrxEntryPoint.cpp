@@ -442,6 +442,7 @@ public:
 	{
 		AcDbObjectId driplId;
 		AcString result;
+		bool isNew = true;
 		acedInitGet(0, L"<New> Continue");
 		int res = acedGetKword(_T("\n[<New> Continue]: "), result);
 
@@ -475,6 +476,8 @@ public:
 		else if (result.compare(_T("Continue")) == 0)
 		{
 			//Existing object is selected for continuation
+			isNew = false;
+
 			ads_name ename;
 			ads_point pt;
 			if (acedEntSel(_T("Select pipeline to continue: "), ename, pt) != RTNORM)
@@ -561,17 +564,24 @@ public:
 				}
 			}
 
-			if (firstIteration)
-			{
-				int pipeSize = pline->la
+			//Determine the current pline's size
+			AcString layerName = pline->layer();
+			uint16_t dnSize = Schedule::resolveDn(layerName);
+			acutPrintf(_T("\nResolved size: DN%.d. "), dnSize);
 
+			//Update size data
+			if (firstIteration && isNew)
+			{
+				dripl->ChangeSize(dnSize, 0);
+				firstIteration = false;
 			}
 			else
 			{
-
+				dripl->AddSize(dnSize);
 			}
 
 			dripl->UpdateLastSegment();
+			dripl->ConsolidateSizes();
 			dripl->draw();
 		}
 	}
