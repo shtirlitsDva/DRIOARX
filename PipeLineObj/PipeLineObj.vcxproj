@@ -21,7 +21,7 @@
     <CLRSupport>false</CLRSupport>
     <UseOfMfc>false</UseOfMfc>
     <!-- <UseOfAtl>false</UseOfAtl> -->
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -49,6 +49,7 @@
   <PropertyGroup Label="Configuration">
     <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v141'">v141</PlatformToolset>
     <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v142'">v143</PlatformToolset>
+	<PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <VCToolsVersion />
