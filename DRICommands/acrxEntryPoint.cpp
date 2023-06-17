@@ -168,6 +168,7 @@ public:
 			newText->setAttachment(AcDbMText::AttachmentPoint(5));
 			newText->setBackgroundFill(true);
 			newText->setUseBackgroundColor(true);
+			newText->setBackgroundScaleFactor(1.0);
 
 			if (modelSpace->appendAcDbEntity(newText) == Acad::eOk)
 			{

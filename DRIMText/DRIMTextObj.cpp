@@ -101,29 +101,98 @@ void DRIMTextObj::subViewportDraw(AcGiViewportDraw * mode) {
 	//See this article in case of problems with print
 	//https://adn-cis.org/risovanie-gorizontalnogo-teksta-v-sobstvennom-primitive.html
 	//http://adndevblog.typepad.com/autocad/2012/08/draw-horizontal-text-in-custom-entity.html
-	assertReadEnabled();
 	AcGePoint3d orgn;
-	AcGeVector3d xa, ya, za;
 	AcGeVector3d upVect;
 	mode->viewport().getCameraUpVector(upVect);
 	double rot = rotation();
-	double vpRot = atan2(xa.y, xa.x);
-	double angleDiff = fabs(rot - vpRot);
-	if (angleDiff > PI / 2) {
+	double vpRot = atan2(upVect.y, upVect.x);
+
+	/// Create a vector to specify which quadrants should be considered "upside down".
+	// Here, for example, we're setting quadrants 3 and 4 to be "upside down".
+	std::vector<bool> upsideDownQuadrants = { false, false, true, true };
+
+	// Compute the difference between the viewport rotation and the DRIMtext rotation.
+	double diffRot = vpRot - rot;
+
+	// Adjust the difference to be within the range [-pi, pi] in radians.
+	while (diffRot > PI) {
+		diffRot -= 2 * PI;
+	}
+	while (diffRot < -PI) {
+		diffRot += 2 * PI;
+	}
+
+	// Determine the quadrant of the difference in rotation.
+	int quadrant;
+	if (diffRot > 0) {
+		if (diffRot <= PI / 2) quadrant = 0;
+		else quadrant = 1;
+	}
+	else {
+		if (diffRot >= -PI / 2) quadrant = 3;
+		else quadrant = 2;
+	}
+
+	// Check whether the DRIMtext is "upside-down".
+	bool isUpsideDown = upsideDownQuadrants[quadrant];
+
+	if (isUpsideDown) {
 		AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) }; dir.normalize();
 		AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI * 0.5),sin(rot + PI * 0.5),0.0) }; dirPerp.normalize();
 		AcString text = contents();
-		AcGiTextStyle style;
-		fromAcDbTextStyle(style, this->textStyle());
-		style.loadStyleRec();
-		AcGePoint2d extents = style.extents(contents(), Adesk::kFalse, text.length(), Adesk::kTrue);
-		//AcString ext; ext.format(_T(" *"));//ext.format(_T(" x: %.3f, y: %.3f"), extents.x, extents.y);
-		//text.append(ext);
-		mode->geometry().text(location() + dir * extents.x + dirPerp * extents.y,
-			AcGeVector3d::kZAxis, dir * -1, height(), 1.0, 0.0, text);
+
+		// Define the points for the polygon
+		AcGePoint3d pVertexList[4];
+		pVertexList[0] = AcGePoint3d() + dir * actualWidth() / 2 + dirPerp * actualHeight() / 2;
+		pVertexList[1] = AcGePoint3d() - dir * actualWidth() / 2 + dirPerp * actualHeight() / 2;
+		pVertexList[2] = AcGePoint3d() - dir * actualWidth() / 2 - dirPerp * actualHeight() / 2;
+		pVertexList[3] = AcGePoint3d() + dir * actualWidth() / 2 - dirPerp * actualHeight() / 2;
+		// Define the number of points in the polygon
+		Adesk::UInt32 numPolygonPoints[1] = { 4 };
+		// Define the number of polygons
+		Adesk::UInt32 numPolygonIndices = 1;
+		// Define the position of the polygon
+		AcGePoint3d polygonPositions[1] = { location() };
+		// Define the outline colors of the polygons
+		const AcCmEntityColor* outlineColors = nullptr;
+		// Define the line types of the polygons
+		const AcGiLineType* outlineTypes = nullptr;
+		// Define the fill color of the polygon
+		AcCmEntityColor fillColor;
+		fillColor.setColorIndex(3); // Set to color index 3 (green, for example)
+		const AcCmEntityColor* fillColors = &fillColor;
+		// Define the fill opacities of the polygons
+		const AcCmTransparency* fillOpacities[1];
+		fillOpacities[0] = new AcCmTransparency();
+		fillOpacities[0]->setAlphaPercent(0); // Set to 50% opacity
+
+		// Draw the polygon
+		mode->geometry().polyPolygon(
+			numPolygonIndices,
+			numPolygonPoints,
+			polygonPositions,
+			numPolygonPoints,
+			pVertexList,
+			outlineColors,
+			outlineTypes,
+			fillColors,
+			fillOpacities
+		);
+
+		
+
+		mode->geometry().text(location() + dir * actualWidth() / 2 + dirPerp * actualHeight() / 2,
+			AcGeVector3d::kZAxis, dir * -1.0, textHeight(), 1.0, 0.0, text);
+
+		/*AcGePoint3d pVertexList[2];
+		//pVertexList[0] = location();
+		pVertexList[1] = location() + dir * extents.x + dirPerp * extents.y;
+		mode->geometry().polyline(2, pVertexList);*/
 	}
-	else
-	AcDbMText::subViewportDraw(mode);
+	else AcDbMText::subViewportDraw(mode);
+
+	/*acutPrintf(_T("\nRot: %.2frad %.2f°; vpRot: %.2frad %.2f°; isUpsideDown: %d;"),
+		rot, RTD(rot), vpRot, RTD(vpRot), isUpsideDown);*/
 }
 
 Adesk::UInt32 DRIMTextObj::subViewportDrawLogicalFlags(AcGiViewportDraw * vd) {
