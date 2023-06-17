@@ -62,6 +62,9 @@
     </ClCompile>
     <Link>
     </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../DRIText/$(Platform)/$(Configuration)/DRIDRIText.lib;../DRIMText/$(Platform)/$(Configuration)/DRIDRIMText.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System" />

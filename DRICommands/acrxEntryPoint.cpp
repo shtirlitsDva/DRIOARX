@@ -24,6 +24,8 @@
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "resource.h"
+#include "../DRIMText/DRIMTextObj.h"
+#include "../DRIText/DRITextObject.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -33,112 +35,153 @@
 class CDRICommandsApp : public AcRxArxApp {
 
 public:
-	CDRICommandsApp () : AcRxArxApp () {}
+	CDRICommandsApp() : AcRxArxApp() {}
 
-	virtual AcRx::AppRetCode On_kInitAppMsg (void *pkt) {
+	virtual AcRx::AppRetCode On_kInitAppMsg(void* pkt) {
 		// TODO: Load dependencies here
 
 		// You *must* call On_kInitAppMsg here
-		AcRx::AppRetCode retCode =AcRxArxApp::On_kInitAppMsg (pkt) ;
-		
+		AcRx::AppRetCode retCode = AcRxArxApp::On_kInitAppMsg(pkt);
+
 		// TODO: Add your initialization code here
 
-		return (retCode) ;
+		return (retCode);
 	}
-
-	virtual AcRx::AppRetCode On_kUnloadAppMsg (void *pkt) {
+	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) {
 		// TODO: Add your code here
 
 		// You *must* call On_kUnloadAppMsg here
-		AcRx::AppRetCode retCode =AcRxArxApp::On_kUnloadAppMsg (pkt) ;
+		AcRx::AppRetCode retCode = AcRxArxApp::On_kUnloadAppMsg(pkt);
 
 		// TODO: Unload dependencies here
 
-		return (retCode) ;
+		return (retCode);
+	}
+	virtual void RegisterServerComponents() {
 	}
 
-	virtual void RegisterServerComponents () {
-	}
-	
-	// The ACED_ARXCOMMAND_ENTRY_AUTO macro can be applied to any static member 
-	// function of the CDRICommandsApp class.
-	// The function should take no arguments and return nothing.
-	//
-	// NOTE: ACED_ARXCOMMAND_ENTRY_AUTO has overloads where you can provide resourceid and
-	// have arguments to define context and command mechanism.
-	
-	// ACED_ARXCOMMAND_ENTRY_AUTO(classname, group, globCmd, locCmd, cmdFlags, UIContext)
-	// ACED_ARXCOMMAND_ENTRYBYID_AUTO(classname, group, globCmd, locCmdId, cmdFlags, UIContext)
-	// only differs that it creates a localized name using a string in the resource file
-	//   locCmdId - resource ID for localized command
+	static void DRICommandsReplaceTextWithDRIText() {
+		AcDbObjectIdArray ids{};
+		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
+		AcDbObjectId modelSpaceId;
+		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
+		AcDbBlockTableRecordPointer modelSpace(modelSpaceId, AcDb::kForRead, true);
 
-	// Modal Command with localized name
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRIMyGroup, MyCommand, MyCommandLocal, ACRX_CMD_MODAL)
-	static void DRIMyGroupMyCommand () {
-		// Put your command code here
-
-	}
-
-	// Modal Command with pickfirst selection
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRIMyGroup, MyPickFirst, MyPickFirstLocal, ACRX_CMD_MODAL | ACRX_CMD_USEPICKSET)
-	static void DRIMyGroupMyPickFirst () {
-		ads_name result ;
-		int iRet =acedSSGet (ACRX_T("_I"), NULL, NULL, NULL, result) ;
-		if ( iRet == RTNORM )
+		Acad::ErrorStatus es;
+		AcDbBlockTableRecordIterator* pBtrIter;
+		if ((es = modelSpace->newIterator(pBtrIter)) != Acad::eOk)
 		{
-			// There are selected entities
-			// Put your command using pickfirst set code here
+			acutPrintf(_T("\nCouldn't create Model Space iterator."));
+			return;
 		}
-		else
+
+		AcDbObjectId id;
+		for (pBtrIter->start(); !pBtrIter->done(); pBtrIter->step())
 		{
-			// There are no selected entities
-			// Put your command code here
+			if ((es = pBtrIter->getEntityId(id)) != Acad::eOk) continue;
+			if (id.objectClass() == AcDbText::desc()) ids.append(id);
+		}
+
+		acutPrintf(_T("\nThere are %d objects in id array!"), ids.length());
+
+		modelSpace->upgradeOpen(); //Upgrade for write
+
+		for (auto curId = ids.begin(); curId != ids.end(); ++curId)
+		{
+			AcDbObjectPointer<AcDbText> originalText;
+			originalText.open(*curId, AcDb::kForWrite);
+
+			AcDbObjectPointer<DRIText> newText;
+			newText.create();
+
+			newText->setAlignmentPoint(originalText->alignmentPoint());
+			newText->setPosition(originalText->position());
+			newText->setLayer(originalText->layer());
+			newText->setTextString(originalText->textString());
+			newText->setRotation(originalText->rotation());
+			newText->setHeight(originalText->height());
+			newText->setHorizontalMode(originalText->horizontalMode());
+			newText->setVerticalMode(originalText->verticalMode());
+
+			if (modelSpace->appendAcDbEntity(newText) == Acad::eOk)
+			{
+				originalText->upgradeOpen();
+				originalText->erase(true);
+			}
+		}
+	}
+	static void DRICommandsReplaceMTextWithDRIMText() {
+		AcDbObjectIdArray ids{};
+		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
+		AcDbObjectId modelSpaceId;
+		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
+		AcDbBlockTableRecordPointer modelSpace(modelSpaceId, AcDb::kForRead, true);
+
+		Acad::ErrorStatus es;
+		AcDbBlockTableRecordIterator* pBtrIter;
+		if ((es = modelSpace->newIterator(pBtrIter)) != Acad::eOk)
+		{
+			acutPrintf(_T("\nCouldn't create Model Space iterator."));
+			return;
+		}
+
+		AcDbObjectId id;
+		for (pBtrIter->start(); !pBtrIter->done(); pBtrIter->step())
+		{
+			if ((es = pBtrIter->getEntityId(id)) != Acad::eOk) continue;
+			AcDbObjectPointer<AcDbMText> pEnt(id, AcDb::kForRead);
+			if (pEnt.openStatus() != Acad::eOk) continue;
+			if (!pEnt->isKindOf(AcDbMText::desc())) continue;
+
+			// Get layer name
+			AcString layerName;
+			pEnt->layer(layerName);
+
+			// Check layer name
+			if (layerName == _T("FJV-DIM")) {
+				ids.append(id);
+			}
+		}
+
+		acutPrintf(_T("\nThere are %d objects in id array!"), ids.length());
+
+		modelSpace->upgradeOpen(); //Upgrade for write
+
+		for (auto curId = ids.begin(); curId != ids.end(); ++curId)
+		{
+			AcDbObjectPointer<AcDbMText> originalText;
+			originalText.open(*curId, AcDb::kForWrite);
+
+			AcDbObjectPointer<DRIMTextObj> newText;
+			newText.create();
+
+			newText->setLocation(originalText->location());
+			//newText->setAlignmentPoint(originalText->alignmentPoint());
+			//newText->setPosition(originalText->position());
+			newText->setLayer(originalText->layer());
+			//newText->setTextString(originalText->textString());
+			newText->setContents(originalText->contents());
+			newText->setRotation(originalText->rotation());
+			newText->setTextHeight(originalText->textHeight());
+			//newText->setHorizontalMode(originalText->horizontalMode());
+			//newText->setVerticalMode(originalText->verticalMode());
+			newText->setAttachment(AcDbMText::AttachmentPoint(5));
+			newText->setBackgroundFill(true);
+			newText->setUseBackgroundColor(true);
+
+			if (modelSpace->appendAcDbEntity(newText) == Acad::eOk)
+			{
+				originalText->upgradeOpen();
+				originalText->erase(true);
+			}
 		}
 	}
 
-	// Application Session Command with localized name
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRIMyGroup, MySessionCmd, MySessionCmdLocal, ACRX_CMD_MODAL | ACRX_CMD_SESSION)
-	static void DRIMyGroupMySessionCmd () {
-		// Put your command code here
-	}
-
-	// The ACED_ADSFUNCTION_ENTRY_AUTO / ACED_ADSCOMMAND_ENTRY_AUTO macros can be applied to any static member 
-	// function of the CDRICommandsApp class.
-	// The function may or may not take arguments and have to return RTNORM, RTERROR, RTCAN, RTFAIL, RTREJ to AutoCAD, but use
-	// acedRetNil, acedRetT, acedRetVoid, acedRetInt, acedRetReal, acedRetStr, acedRetPoint, acedRetName, acedRetList, acedRetVal to return
-	// a value to the Lisp interpreter.
-	//
-	// NOTE: ACED_ADSFUNCTION_ENTRY_AUTO / ACED_ADSCOMMAND_ENTRY_AUTO has overloads where you can provide resourceid.
-	
-	//- ACED_ADSFUNCTION_ENTRY_AUTO(classname, name, regFunc) - this example
-	//- ACED_ADSSYMBOL_ENTRYBYID_AUTO(classname, name, nameId, regFunc) - only differs that it creates a localized name using a string in the resource file
-	//- ACED_ADSCOMMAND_ENTRY_AUTO(classname, name, regFunc) - a Lisp command (prefix C:)
-	//- ACED_ADSCOMMAND_ENTRYBYID_AUTO(classname, name, nameId, regFunc) - only differs that it creates a localized name using a string in the resource file
-
-	// Lisp Function is similar to ARX Command but it creates a lisp 
-	// callable function. Many return types are supported not just string
-	// or integer.
-	// ACED_ADSFUNCTION_ENTRY_AUTO(CDRICommandsApp, MyLispFunction, false)
-	static int ads_MyLispFunction () {
-		//struct resbuf *args =acedGetArgs () ;
-		
-		// Put your command code here
-
-		//acutRelRb (args) ;
-		
-		// Return a value to the AutoCAD Lisp Interpreter
-		// acedRetNil, acedRetT, acedRetVoid, acedRetInt, acedRetReal, acedRetStr, acedRetPoint, acedRetName, acedRetList, acedRetVal
-
-		return (RTNORM) ;
-	}
-	
-} ;
+};
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CDRICommandsApp)
 
-ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRIMyGroup, MyCommand, MyCommandLocal, ACRX_CMD_MODAL, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRIMyGroup, MyPickFirst, MyPickFirstLocal, ACRX_CMD_MODAL | ACRX_CMD_USEPICKSET, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRIMyGroup, MySessionCmd, MySessionCmdLocal, ACRX_CMD_MODAL | ACRX_CMD_SESSION, NULL)
-ACED_ADSSYMBOL_ENTRY_AUTO(CDRICommandsApp, MyLispFunction, false)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRICommands, ReplaceTextWithDRIText, RTWDT, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CDRICommandsApp, DRICommands, ReplaceMTextWithDRIMText, RMTWDMT, ACRX_CMD_MODAL, NULL)
 

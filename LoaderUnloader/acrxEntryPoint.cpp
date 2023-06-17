@@ -60,83 +60,13 @@ public:
 	virtual void RegisterServerComponents () {
 	}
 	
-	// The ACED_ARXCOMMAND_ENTRY_AUTO macro can be applied to any static member 
-	// function of the CLoaderUnloaderApp class.
-	// The function should take no arguments and return nothing.
-	//
-	// NOTE: ACED_ARXCOMMAND_ENTRY_AUTO has overloads where you can provide resourceid and
-	// have arguments to define context and command mechanism.
-	
-	// ACED_ARXCOMMAND_ENTRY_AUTO(classname, group, globCmd, locCmd, cmdFlags, UIContext)
-	// ACED_ARXCOMMAND_ENTRYBYID_AUTO(classname, group, globCmd, locCmdId, cmdFlags, UIContext)
-	// only differs that it creates a localized name using a string in the resource file
-	//   locCmdId - resource ID for localized command
-
-	// Modal Command with localized name
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CLoaderUnloaderApp, DRIMyGroup, MyCommand, MyCommandLocal, ACRX_CMD_MODAL)
-	static void DRIMyGroupMyCommand () {
-		// Put your command code here
-
-	}
-
-	// Modal Command with pickfirst selection
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CLoaderUnloaderApp, DRIMyGroup, MyPickFirst, MyPickFirstLocal, ACRX_CMD_MODAL | ACRX_CMD_USEPICKSET)
-	static void DRIMyGroupMyPickFirst () {
-		ads_name result ;
-		int iRet =acedSSGet (ACRX_T("_I"), NULL, NULL, NULL, result) ;
-		if ( iRet == RTNORM )
-		{
-			// There are selected entities
-			// Put your command using pickfirst set code here
-		}
-		else
-		{
-			// There are no selected entities
-			// Put your command code here
-		}
-	}
-
-	// Application Session Command with localized name
-	// ACED_ARXCOMMAND_ENTRY_AUTO(CLoaderUnloaderApp, DRIMyGroup, MySessionCmd, MySessionCmdLocal, ACRX_CMD_MODAL | ACRX_CMD_SESSION)
-	static void DRIMyGroupMySessionCmd () {
-		// Put your command code here
-	}
-
-	// The ACED_ADSFUNCTION_ENTRY_AUTO / ACED_ADSCOMMAND_ENTRY_AUTO macros can be applied to any static member 
-	// function of the CLoaderUnloaderApp class.
-	// The function may or may not take arguments and have to return RTNORM, RTERROR, RTCAN, RTFAIL, RTREJ to AutoCAD, but use
-	// acedRetNil, acedRetT, acedRetVoid, acedRetInt, acedRetReal, acedRetStr, acedRetPoint, acedRetName, acedRetList, acedRetVal to return
-	// a value to the Lisp interpreter.
-	//
-	// NOTE: ACED_ADSFUNCTION_ENTRY_AUTO / ACED_ADSCOMMAND_ENTRY_AUTO has overloads where you can provide resourceid.
-	
-	//- ACED_ADSFUNCTION_ENTRY_AUTO(classname, name, regFunc) - this example
-	//- ACED_ADSSYMBOL_ENTRYBYID_AUTO(classname, name, nameId, regFunc) - only differs that it creates a localized name using a string in the resource file
-	//- ACED_ADSCOMMAND_ENTRY_AUTO(classname, name, regFunc) - a Lisp command (prefix C:)
-	//- ACED_ADSCOMMAND_ENTRYBYID_AUTO(classname, name, nameId, regFunc) - only differs that it creates a localized name using a string in the resource file
-
-	// Lisp Function is similar to ARX Command but it creates a lisp 
-	// callable function. Many return types are supported not just string
-	// or integer.
-	// ACED_ADSFUNCTION_ENTRY_AUTO(CLoaderUnloaderApp, MyLispFunction, false)
-	static int ads_MyLispFunction () {
-		//struct resbuf *args =acedGetArgs () ;
-		
-		// Put your command code here
-
-		//acutRelRb (args) ;
-		
-		// Return a value to the AutoCAD Lisp Interpreter
-		// acedRetNil, acedRetT, acedRetVoid, acedRetInt, acedRetReal, acedRetStr, acedRetPoint, acedRetName, acedRetList, acedRetVal
-
-		return (RTNORM) ;
-	}
-	
 	static void DRILoaderUnloaderLLoad()
 	{
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIPipeLineObj.dbx"), true);
+		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIPipeLineObj.dbx"), true);
 		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIText.dbx"), true);
-		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIPipeLineUi.arx"));
+		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIMText.dbx"), true);
+		//acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIPipeLineUi.arx"));
+		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRICommands.arx"));
 		//acrxLoadModule(_T("DRIDriPipelineUiProject.arx")); */
 		/*acedArxLoad(_T("DRIPipelineProject.dbx"));
 		acedArxLoad(_T("DRIDriPipelineUiProject.arx"));*/
@@ -144,18 +74,22 @@ public:
 
 	static void DRILoaderUnloaderLLoadBg()
 	{
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
+		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
 		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIText.dbx"), true);
+		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIMText.dbx"), true);
 		//acedArxLoad(_T("X:\\26 ObjectArx\\ObjectArx2022Training\\Step01\\x64\\Debug\\DRIPipelineProject.dbx"));
-		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
+		//acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
+		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRICommands.arx"));
 	}
 
 	static void DRILoaderUnloaderULoad()
 	{
-		acrxUnloadModule(_T("DRIPipeLineObj.dbx"));
+		//acrxUnloadModule(_T("DRIPipeLineObj.dbx"));
 		acrxUnloadModule(_T("DRIDRIText.dbx"));
+		acrxUnloadModule(_T("DRIDRIMText.dbx"));
 		//acedArxUnload(_T("DRIPipelineProject.dbx"));
-		acedArxUnload(_T("DRIDRIPipeLineUi.arx"));
+		//acedArxUnload(_T("DRIDRIPipeLineUi.arx"));
+		acedArxUnload(_T("DRIDRICommands.arx"));
 	}
 } ;
 

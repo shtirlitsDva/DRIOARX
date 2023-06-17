@@ -77,10 +77,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DRIText\TrigMacros.h" />
     <ClInclude Include="DRIMTextObj.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="TrigMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DRIMText.rc" />

@@ -35,10 +35,10 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\DRIText\TrigMacros.h">
+    <ClInclude Include="DRIMTextObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DRIMTextObj.h">
+    <ClInclude Include="TrigMacros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
