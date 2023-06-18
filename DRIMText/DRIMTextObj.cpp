@@ -107,7 +107,14 @@ void DRIMTextObj::subViewportDraw(AcGiViewportDraw * mode) {
 	double rot = rotation();
 	double vpRot = atan2(upVect.y, upVect.x);
 
-	/// Create a vector to specify which quadrants should be considered "upside down".
+	// Handle plotting
+	bool isPlotting = false;
+	if (mode->context()->isPlotGeneration()) {
+		isPlotting = true;
+		vpRot -= PI / 2;
+	}
+
+	// Create a vector to specify which quadrants should be considered "upside down".
 	// Here, for example, we're setting quadrants 3 and 4 to be "upside down".
 	std::vector<bool> upsideDownQuadrants = { false, false, true, true };
 
@@ -159,12 +166,10 @@ void DRIMTextObj::subViewportDraw(AcGiViewportDraw * mode) {
 		const AcGiLineType* outlineTypes = nullptr;
 		// Define the fill color of the polygon
 		AcCmEntityColor fillColor;
-		fillColor.setColorIndex(3); // Set to color index 3 (green, for example)
-		const AcCmEntityColor* fillColors = &fillColor;
+		fillColor.setColorIndex(0);
+		AcCmEntityColor fillColors[1] = { fillColor };
 		// Define the fill opacities of the polygons
-		const AcCmTransparency* fillOpacities[1];
-		fillOpacities[0] = new AcCmTransparency();
-		fillOpacities[0]->setAlphaPercent(0); // Set to 50% opacity
+		AcCmTransparency fillOpacities[1] = { AcCmTransparency(Adesk::UInt8(255)) };
 
 		// Draw the polygon
 		mode->geometry().polyPolygon(
@@ -178,8 +183,6 @@ void DRIMTextObj::subViewportDraw(AcGiViewportDraw * mode) {
 			fillColors,
 			fillOpacities
 		);
-
-		
 
 		mode->geometry().text(location() + dir * actualWidth() / 2 + dirPerp * actualHeight() / 2,
 			AcGeVector3d::kZAxis, dir * -1.0, textHeight(), 1.0, 0.0, text);
