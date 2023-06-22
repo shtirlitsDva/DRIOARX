@@ -194,60 +194,15 @@ void DRIMTextObj::subViewportDraw(AcGiViewportDraw * mode) {
 		mode->subEntityTraits().setColor(0);
 	}
 
+	AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) }; dir.normalize();
+	AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI * 0.5),sin(rot + PI * 0.5),0.0) }; dirPerp.normalize();
+	AcString text = contents();
+
 	if (isUpsideDown) {
-		AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) }; dir.normalize();
-		AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI * 0.5),sin(rot + PI * 0.5),0.0) }; dirPerp.normalize();
-		AcString text = contents();
-
-		//// Define the points for the polygon
-		//AcGePoint3d pVertexList[4];
-		//pVertexList[0] = AcGePoint3d() + dir * actualWidth() / 2 + dirPerp * actualHeight() / 2;
-		//pVertexList[1] = AcGePoint3d() - dir * actualWidth() / 2 + dirPerp * actualHeight() / 2;
-		//pVertexList[2] = AcGePoint3d() - dir * actualWidth() / 2 - dirPerp * actualHeight() / 2;
-		//pVertexList[3] = AcGePoint3d() + dir * actualWidth() / 2 - dirPerp * actualHeight() / 2;
-		//// Define the number of points in the polygon
-		//Adesk::UInt32 numPolygonPoints[1] = { 4 };
-		//// Define the number of polygons
-		//Adesk::UInt32 numPolygonIndices = 1;
-		//// Define the position of the polygon
-		//AcGePoint3d polygonPositions[1] = { location() };
-		//// Define the outline colors of the polygons
-		//const AcCmEntityColor* outlineColors = nullptr;
-		//// Define the line types of the polygons
-		//const AcGiLineType* outlineTypes = nullptr;
-		//// Define the fill color of the polygon
-		//AcCmEntityColor fillColor;
-		//fillColor.setColorIndex(0);
-		//AcCmEntityColor fillColors[1] = { fillColor };
-		//// Define the fill opacities of the polygons
-		//AcCmTransparency fillOpacities[1] = { AcCmTransparency(Adesk::UInt8(255)) };
-
-		//// Draw the polygon
-		//mode->geometry().polyPolygon(
-		//	numPolygonIndices,
-		//	numPolygonPoints,
-		//	polygonPositions,
-		//	numPolygonPoints,
-		//	pVertexList,
-		//	outlineColors,
-		//	outlineTypes,
-		//	fillColors,
-		//	fillOpacities
-		//);
-
 		mode->geometry().text(location() + dir * actualWidth() / 2 + dirPerp * actualHeight() / 2,
 			AcGeVector3d::kZAxis, dir * -1.0, textHeight(), 1.0, 0.0, text);
-
-		/*AcGePoint3d pVertexList[2];
-		//pVertexList[0] = location();
-		pVertexList[1] = location() + dir * extents.x + dirPerp * extents.y;
-		mode->geometry().polyline(2, pVertexList);*/
 	}
 	else {
-		AcGeVector3d dir{ AcGeVector3d(cos(rot),sin(rot),0.0) }; dir.normalize();
-		AcGeVector3d dirPerp{ AcGeVector3d(cos(rot + PI * 0.5),sin(rot + PI * 0.5),0.0) }; dirPerp.normalize();
-		AcString text = contents();
-
 		mode->geometry().text(location() - dir * actualWidth() / 2 - dirPerp * actualHeight() / 2,
 			AcGeVector3d::kZAxis, dir, textHeight(), 1.0, 0.0, text);
 	}
