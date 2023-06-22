@@ -148,7 +148,6 @@ void DRIMTextObj::subViewportDraw(AcGiViewportDraw * mode) {
 	//See this article in case of problems with print
 	//https://adn-cis.org/risovanie-gorizontalnogo-teksta-v-sobstvennom-primitive.html
 	//http://adndevblog.typepad.com/autocad/2012/08/draw-horizontal-text-in-custom-entity.html
-	AcGePoint3d orgn;
 	AcGeVector3d upVect;
 	mode->viewport().getCameraUpVector(upVect);
 	double rot = rotation();
