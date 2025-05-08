@@ -84,12 +84,12 @@ public:
 
 	static void DRILoaderUnloaderULoad()
 	{
+		acedArxUnload(_T("DRIDRICommands.arx"));
 		//acrxUnloadModule(_T("DRIPipeLineObj.dbx"));
 		acrxUnloadModule(_T("DRIDRIText.dbx"));
 		acrxUnloadModule(_T("DRIDRIMText.dbx"));
 		//acedArxUnload(_T("DRIPipelineProject.dbx"));
-		//acedArxUnload(_T("DRIDRIPipeLineUi.arx"));
-		acedArxUnload(_T("DRIDRICommands.arx"));
+		//acedArxUnload(_T("DRIDRIPipeLineUi.arx"));		
 	}
 } ;
 
