@@ -20,7 +20,7 @@
 //
 
 //-----------------------------------------------------------------------------
-//----- DRIPipeLabel.cpp : Implementation of DRIPipeLabel
+//----- DRITextObject.cpp : Implementation of DRITextObject
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "DRITextObject.h"

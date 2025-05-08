@@ -20,7 +20,7 @@
 //
 
 //-----------------------------------------------------------------------------
-//----- DRIPipeLabel.h : Declaration of the DRIPipeLabel
+//----- DRITextObject.h : Declaration of the DRITextObject
 //-----------------------------------------------------------------------------
 #pragma once
 
