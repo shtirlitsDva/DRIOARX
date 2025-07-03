@@ -44,18 +44,10 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Autodesk.arx-2023.props" />
+    <Import Project="Autodesk.arx-2025.props" />
   </ImportGroup>
   <PropertyGroup Label="Configuration">
-    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v141'">v141</PlatformToolset>
-    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v142'">v143</PlatformToolset>
-	<PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <VCToolsVersion />
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <VCToolsVersion />
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -67,8 +59,6 @@
       <AdditionalOptions>/Wv:17.00.61030 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level1</WarningLevel>
-      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Level1</WarningLevel>
     </ClCompile>
     <Link>
     </Link>

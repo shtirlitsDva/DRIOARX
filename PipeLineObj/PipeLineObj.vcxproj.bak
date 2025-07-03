@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ArxAppType>arx</ArxAppType>
+    <ArxAppType>dbx</ArxAppType>
     <RDS>DRI</RDS>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -34,7 +34,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup Label="Globals">
     <TargetName Condition="'$(RDS)'!=''">$(RDS)$(ProjectName)</TargetName>
-    <ProjectGuid>{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}</ProjectGuid>
+    <ProjectGuid>{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}</ProjectGuid>
     <!--For Visual Studio 2019, you can specify the most recent version of the Windows 10 SDK by using a value of 10.0-->
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -44,10 +44,18 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Autodesk.arx-2025.props" />
+    <Import Project="Autodesk.arx-2023.props" />
   </ImportGroup>
   <PropertyGroup Label="Configuration">
-    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v141'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v142'">v143</PlatformToolset>
+	<PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VCToolsVersion />
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VCToolsVersion />
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -57,16 +65,16 @@
       <PreprocessorDefinitions Condition="'$(UseOfMfc)'=='Dynamic'">_AFXEXT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <!-- Added to avoid Narrow conversion warnings introduced in VS2015 /Wv:xx[.yy[.zzzzz],  is CL version -->
       <AdditionalOptions>/Wv:17.00.61030 %(AdditionalOptions)</AdditionalOptions>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level1</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Level1</WarningLevel>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp17</LanguageStandard>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdcpp17</LanguageStandard>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdc17</LanguageStandard_C>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-    </Link>
-    <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../DRIText/$(Platform)/$(Configuration)/DRIDRIText.lib;../DRIMText/$(Platform)/$(Configuration)/DRIDRIMText.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../DRIText/$(Platform)/$(Configuration)/DRIDRIText.lib;../PipeLineObj/$(Platform)/$(Configuration)/DRIPipeLineObj.lib;../DRIMText/$(Platform)/$(Configuration)/DRIDRIMText.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -75,20 +83,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acrxEntryPoint.cpp" />
-    <ClCompile Include="DocData.cpp" />
-    <ClCompile Include="DRICommands.cpp" />
+    <ClCompile Include="DRIPipeLabelGroup.cpp" />
+    <ClCompile Include="DRIPipelineLabel.cpp" />
+    <ClCompile Include="DRIPipelinePolyline.cpp" />
+    <ClCompile Include="DRIPipelineSegment.cpp" />
+    <ClCompile Include="PipeLineObj.cpp" />
     <ClCompile Include="StdAfx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DocData.h" />
+    <ClInclude Include="DRIPipeLabelGroup.h" />
+    <ClInclude Include="DRIPipelineLabel.h" />
+    <ClInclude Include="DRIPipelinePolyline.h" />
+    <ClInclude Include="DRIPipelineSegment.h" />
+    <ClInclude Include="meta_enum.hpp" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="TrigMacros.h" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="DRICommands.rc" />
+    <ResourceCompile Include="PipeLineObj.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

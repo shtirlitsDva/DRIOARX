@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ArxAppType>arx</ArxAppType>
+    <ArxAppType>dbx</ArxAppType>
     <RDS>DRI</RDS>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -34,7 +34,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup Label="Globals">
     <TargetName Condition="'$(RDS)'!=''">$(RDS)$(ProjectName)</TargetName>
-    <ProjectGuid>{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}</ProjectGuid>
+    <ProjectGuid>{32DC8B4C-3F61-4980-9A15-2A23937A2E96}</ProjectGuid>
     <!--For Visual Studio 2019, you can specify the most recent version of the Windows 10 SDK by using a value of 10.0-->
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -44,10 +44,18 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="Autodesk.arx-2025.props" />
+    <Import Project="Autodesk.arx-2023.props" />
   </ImportGroup>
   <PropertyGroup Label="Configuration">
-    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v141'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v142'">v143</PlatformToolset>
+	<PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VCToolsVersion />
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VCToolsVersion />
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -59,14 +67,10 @@
       <AdditionalOptions>/Wv:17.00.61030 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level1</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Level1</WarningLevel>
     </ClCompile>
     <Link>
-    </Link>
-    <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../DRIText/$(Platform)/$(Configuration)/DRIDRIText.lib;../DRIMText/$(Platform)/$(Configuration)/DRIDRIMText.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../DRIText/$(Platform)/$(Configuration)/DRIDRIText.lib;../PipeLineObj/$(Platform)/$(Configuration)/DRIPipeLineObj.lib;../DRIMText/$(Platform)/$(Configuration)/DRIDRIMText.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -75,20 +79,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acrxEntryPoint.cpp" />
-    <ClCompile Include="DocData.cpp" />
-    <ClCompile Include="DRICommands.cpp" />
+    <ClCompile Include="DRIAttributeDef.cpp" />
+    <ClCompile Include="DRITextObject.cpp" />
+    <ClCompile Include="DRIText.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DocData.h" />
+    <ClInclude Include="DRIAttributeDef.h" />
+    <ClInclude Include="DRITextObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="TrigMacros.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="DRICommands.rc" />
+    <ResourceCompile Include="DRIText.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
