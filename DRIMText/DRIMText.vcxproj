@@ -47,7 +47,7 @@
     <Import Project="Autodesk.arx-2024.props" />
   </ImportGroup>
   <PropertyGroup Label="Configuration">
-    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(ArxSDKPlatform)'=='v143'">v145</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
