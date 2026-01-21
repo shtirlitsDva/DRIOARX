@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="acrxEntryPoint.cpp" />
-    <ClCompile Include="DRIAttributeDef.cpp" />
     <ClCompile Include="DRITextObject.cpp" />
     <ClCompile Include="DRIText.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -78,7 +77,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DRIAttributeDef.h" />
     <ClInclude Include="DRITextObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />

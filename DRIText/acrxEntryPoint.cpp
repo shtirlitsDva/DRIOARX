@@ -25,7 +25,6 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "DRITextObject.h"
-#include "DRIAttributeDef.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("DRI")
@@ -46,17 +45,14 @@ public:
 		AcRx::AppRetCode retCode = AcRxDbxApp::On_kInitAppMsg(pkt);
 
 		// TODO: Add your initialization code here
-		acrxRegisterService(DRITEXTOBJ_DBXSERVICE);
-		acrxRegisterService(DRIATTRIBUTEDEFOBJ_DBXSERVICE);
+		acrxRegisterService(DRITEXTOBJ_DBXSERVICE);		
 		return (retCode);
 	}
 
 	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt)
 	{// TODO: Add your code here
-		delete acrxServiceDictionary->remove(DRITEXTOBJ_DBXSERVICE);
-		delete acrxServiceDictionary->remove(DRIATTRIBUTEDEFOBJ_DBXSERVICE);
-		deleteAcRxClass(DRIText::desc());
-		deleteAcRxClass(DRIAttributeDef::desc());
+		delete acrxServiceDictionary->remove(DRITEXTOBJ_DBXSERVICE);		
+		deleteAcRxClass(DRIText::desc());		
 
 		// You *must* call On_kUnloadAppMsg here
 		AcRx::AppRetCode retCode = AcRxDbxApp::On_kUnloadAppMsg(pkt);

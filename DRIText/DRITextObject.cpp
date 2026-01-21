@@ -164,11 +164,12 @@ Acad::ErrorStatus DRIText::dxfInFields(AcDbDxfFiler * pFiler)
 			//case AcDb::kDxfXCoord:
 			//	if ( version == 1 )
 			//		cen3d =asPnt3d (rb.resval.rpoint) ;
-			//	else 
+			//	else
 			//		cen2d =asPnt2d (rb.resval.rpoint) ;
 			//	break ;
 			//.....
 
+		case 0: // Dummy case to prevent C4065 warning
 		default:
 			//----- An unrecognized group. Push it back so that the subclass can read it again.
 			pFiler->pushBackItem();
