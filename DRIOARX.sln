@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRIMText", "DRIMText\DRIMTe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRICommands", "DRICommands\DRICommands.vcxproj", "{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test2025", "Test2025\Test2025.vcxproj", "{51982A78-561A-4829-AA51-F0F35F48E082}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -49,6 +51,10 @@ Global
 		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Debug|x64.Build.0 = Debug|x64
 		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Release|x64.ActiveCfg = Release|x64
 		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Release|x64.Build.0 = Release|x64
+		{51982A78-561A-4829-AA51-F0F35F48E082}.Debug|x64.ActiveCfg = Debug|x64
+		{51982A78-561A-4829-AA51-F0F35F48E082}.Debug|x64.Build.0 = Debug|x64
+		{51982A78-561A-4829-AA51-F0F35F48E082}.Release|x64.ActiveCfg = Release|x64
+		{51982A78-561A-4829-AA51-F0F35F48E082}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
