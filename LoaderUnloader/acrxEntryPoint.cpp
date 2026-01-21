@@ -77,9 +77,10 @@ public:
 		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
 		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIText.dbx"), true);
 		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIMText.dbx"), true);
+		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\NSNorsynObjecs.dbx"), true);
 		//acedArxLoad(_T("X:\\26 ObjectArx\\ObjectArx2022Training\\Step01\\x64\\Debug\\DRIPipelineProject.dbx"));
 		//acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
-		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRICommands.arx"));
+		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\NSCommands.arx"));
 	}
 
 	static void DRILoaderUnloaderULoad()

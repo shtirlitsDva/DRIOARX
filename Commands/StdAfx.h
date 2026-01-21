@@ -25,7 +25,7 @@
 //-      but are changed infrequently
 //-----------------------------------------------------------------------------
 #pragma once
-#define NSCOMMANDS_MODULE
+#define COMMANDS_MODULE
 
 #ifndef _ALLOW_RTCc_IN_STL
 #define _ALLOW_RTCc_IN_STL
@@ -37,7 +37,7 @@
 
     //-----------------------------------------------------------------------------
 #include <windows.h>
-#include "tchar.h"
+
     //- ObjectARX and OMF headers needs this
 #include <map>
 

@@ -62,7 +62,8 @@ DRIText::DRIText() : AcDbText()//, extents()
 }
 
 DRIText::~DRIText()
-{}
+{
+}
 
 //-----------------------------------------------------------------------------
 //----- AcDbObject protocols
@@ -156,6 +157,10 @@ Acad::ErrorStatus DRIText::dxfInFields(AcDbDxfFiler * pFiler)
 	//if ( version < DRIPipeLabel::kCurrentVersionNumber )
 	//	return (Acad::eMakeMeProxy) ;
 	//----- Read params in non order dependant manner
+	//----- Suppress C4065: "switch statement contains 'default' but no 'case' labels"
+	//----- This is standard ObjectARX boilerplate - case labels would be added here	
+	#pragma warning( push )
+	#pragma warning( disable: 4065 )
 	while (es == Acad::eOk && (es = pFiler->readResBuf(&rb)) == Acad::eOk)
 	{
 		switch (rb.restype)
@@ -177,6 +182,7 @@ Acad::ErrorStatus DRIText::dxfInFields(AcDbDxfFiler * pFiler)
 			break;
 		}
 	}
+	#pragma warning( pop )
 	//----- At this point the es variable must contain eEndOfFile
 	//----- - either from readResBuf() or from pushback. If not,
 	//----- it indicates that an error happened and we should
