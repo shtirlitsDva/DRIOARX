@@ -37,6 +37,7 @@
 
     //-----------------------------------------------------------------------------
 #include <windows.h>
+#include <tchar.h>
 
     //- ObjectARX and OMF headers needs this
 #include <map>

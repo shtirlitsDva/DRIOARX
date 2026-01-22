@@ -1,0 +1,50 @@
+// comNorsynObjects.idl : IDL source for comNorsynObjects.dll
+//
+//////////////////////////////////////////////////////////////////////////////
+//
+//  COM wrapper library for Norsyn custom entities
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// TODO: Generate new GUIDs using Visual Studio's Tools > Create GUID
+// Replace all placeholder GUIDs below with your own unique GUIDs
+
+//
+// Type library section and components
+//
+[
+	uuid(B1C2D3E4-2345-6789-ABCD-EF0123456789),  // LIBID_COMNSTEXTLib - TODO: Replace with new GUID
+	version(1.0),
+	helpstring("Norsyn Objects COM Wrapper 1.0 Type Library")
+]
+library COMNSTEXTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	// Import AutoCAD type library (use version matching your ObjectARX SDK)
+	importlib("axdb25enu.tlb");
+
+	import "oaidl.idl";
+	import "ocidl.idl";
+
+	//
+	// coclasses in type library
+	//
+
+	// ComNSText coclass - wrapper for NSText entity
+	[
+		uuid(A1B2C3D4-1234-5678-9ABC-DEF012345678),  // CLSID_ComNSText - TODO: Replace with new GUID
+		helpstring("ComNSText Class"),
+		noncreatable
+	]
+	coclass ComNSText
+	{
+		[default] interface IAcadText;
+		[source] interface IAcadObjectEvents;
+	};
+
+	// Add more coclasses here for future entities:
+	// coclass ComNSMText { ... };
+	// coclass ComNSPipeLabel { ... };
+};

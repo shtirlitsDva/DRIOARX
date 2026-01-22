@@ -1,0 +1,35 @@
+// comNorsynObjects.idl : IDL source for comNorsynObjects
+//
+// COM wrapper library for Norsyn custom entities
+// Provides Properties Palette integration for custom entity display names
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(7c99a33f-a411-48d6-9707-81badecc45f7),
+	version(1.0),
+	helpstring("Norsyn Objects COM Wrapper 1.0 Type Library")
+]
+library comNorsynObjectsLib
+{
+	importlib("stdole2.tlb");
+
+	// Import AutoCAD type library (for IAcadText, IAcadEntity, etc.)
+	importlib("axdb25enu.tlb");
+
+	// ComNSText coclass - wrapper for NSText entity
+	[
+		uuid(6C8B3C59-8519-4172-A9C3-301CD4C55570),
+		helpstring("ComNSText Class"),
+		noncreatable
+	]
+	coclass ComNSText
+	{
+		[default] interface IAcadText;
+		[source] interface IAcadObjectEvents;
+	};
+
+	// Add more coclasses here for future entities:
+	// coclass ComNSMText { ... };
+};

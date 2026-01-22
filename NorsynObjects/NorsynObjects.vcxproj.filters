@@ -24,7 +24,7 @@
     <ClCompile Include="NorsynObjects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NSText.cpp">
+    <ClCompile Include="Entites\NSText\NSText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NSText.h">
+    <ClInclude Include="Entites\NSText\NSText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -46,5 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Autodesk.arx-2025.props" />
+    <None Include="Autodesk.arx-2025-net.props" />
+    <None Include="crx.props" />
   </ItemGroup>
 </Project>

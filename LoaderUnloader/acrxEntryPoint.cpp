@@ -63,10 +63,11 @@ public:
 	static void DRILoaderUnloaderLLoad()
 	{
 		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIPipeLineObj.dbx"), true);
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIText.dbx"), true);
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIMText.dbx"), true);
+		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIText.dbx"), true);
+		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIMText.dbx"), true);
 		//acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRIPipeLineUi.arx"));
-		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRICommands.arx"));
+		//acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\DRIDRICommands.arx"));
+		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Release\\NSCommands.arx"));
 		//acrxLoadModule(_T("DRIDriPipelineUiProject.arx")); */
 		/*acedArxLoad(_T("DRIPipelineProject.dbx"));
 		acedArxLoad(_T("DRIDriPipelineUiProject.arx"));*/
@@ -75,9 +76,9 @@ public:
 	static void DRILoaderUnloaderLLoadBg()
 	{
 		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIPipeLineObj.dbx"), true);
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIText.dbx"), true);
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIMText.dbx"), true);
-		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\NSNorsynObjecs.dbx"), true);
+		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIText.dbx"), true);
+		//acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIMText.dbx"), true);
+		acrxLoadModule(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\NSNorsynObjects.dbx"), true);
 		//acedArxLoad(_T("X:\\26 ObjectArx\\ObjectArx2022Training\\Step01\\x64\\Debug\\DRIPipelineProject.dbx"));
 		//acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\DRIDRIPipeLineUi.arx"));
 		acedArxLoad(_T("X:\\GitHub\\ShtirlitsDva\\DRIOARX\\x64\\Debug\\NSCommands.arx"));
@@ -85,10 +86,11 @@ public:
 
 	static void DRILoaderUnloaderULoad()
 	{
-		acedArxUnload(_T("DRIDRICommands.arx"));
+		acedArxUnload(_T("NSCommands.arx"));
 		//acrxUnloadModule(_T("DRIPipeLineObj.dbx"));
-		acrxUnloadModule(_T("DRIDRIText.dbx"));
-		acrxUnloadModule(_T("DRIDRIMText.dbx"));
+		acrxUnloadModule(_T("NSNorsynObjects.dbx"));
+		//acrxUnloadModule(_T("DRIDRIText.dbx"));
+		//acrxUnloadModule(_T("DRIDRIMText.dbx"));
 		//acedArxUnload(_T("DRIPipelineProject.dbx"));
 		//acedArxUnload(_T("DRIDRIPipeLineUi.arx"));		
 	}

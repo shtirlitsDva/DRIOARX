@@ -5,24 +5,23 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoaderUnloader", "LoaderUnloader\LoaderUnloader.vcxproj", "{A31A6F73-8373-4143-944B-27E3C691C203}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PipeLineObj", "PipeLineObj\PipeLineObj.vcxproj", "{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRIText", "DRIText\DRIText.vcxproj", "{32DC8B4C-3F61-4980-9A15-2A23937A2E96}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRIMText", "DRIMText\DRIMText.vcxproj", "{3201652B-7D97-43F4-8F91-C4FE74413D72}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DriCommands", "DRICommands\DRICommands.vcxproj", "{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{163DB0C2-1F07-4E71-A48B-95123085E2E4} = {163DB0C2-1F07-4E71-A48B-95123085E2E4}
-		{3201652B-7D97-43F4-8F91-C4FE74413D72} = {3201652B-7D97-43F4-8F91-C4FE74413D72}
-		{32DC8B4C-3F61-4980-9A15-2A23937A2E96} = {32DC8B4C-3F61-4980-9A15-2A23937A2E96}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test2025", "Test2025\Test2025.vcxproj", "{51982A78-561A-4829-AA51-F0F35F48E082}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NorsynObjects", "NorsynObjects\NorsynObjects.vcxproj", "{163DB0C2-1F07-4E71-A48B-95123085E2E4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Commands", "Commands\Commands.vcxproj", "{F9A0DCAB-EB1E-438C-BB63-60951D8DDB6D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{163DB0C2-1F07-4E71-A48B-95123085E2E4} = {163DB0C2-1F07-4E71-A48B-95123085E2E4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "comNorsynObjects", "comNorsynObjects\comNorsynObjects.vcxproj", "{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "comNorsynObjectsPS", "comNorsynObjectsPS\comNorsynObjectsPS.vcxproj", "{62E8514F-55EE-2A59-08F3-D7C050FEA4D8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A} = {FDF51364-571C-EABD-A7D4-15EE0C32BB1A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,22 +33,10 @@ Global
 		{A31A6F73-8373-4143-944B-27E3C691C203}.Debug|x64.Build.0 = Debug|x64
 		{A31A6F73-8373-4143-944B-27E3C691C203}.Release|x64.ActiveCfg = Release|x64
 		{A31A6F73-8373-4143-944B-27E3C691C203}.Release|x64.Build.0 = Release|x64
-		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Debug|x64.ActiveCfg = Debug|x64
-		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Debug|x64.Build.0 = Debug|x64
-		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Release|x64.ActiveCfg = Release|x64
-		{F87873B0-2B5D-4D52-8FD5-BE1CDC50B2E3}.Release|x64.Build.0 = Release|x64
-		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Debug|x64.ActiveCfg = Debug|x64
-		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Debug|x64.Build.0 = Debug|x64
-		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Release|x64.ActiveCfg = Release|x64
-		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Release|x64.Build.0 = Release|x64
 		{3201652B-7D97-43F4-8F91-C4FE74413D72}.Debug|x64.ActiveCfg = Debug|x64
 		{3201652B-7D97-43F4-8F91-C4FE74413D72}.Debug|x64.Build.0 = Debug|x64
 		{3201652B-7D97-43F4-8F91-C4FE74413D72}.Release|x64.ActiveCfg = Release|x64
 		{3201652B-7D97-43F4-8F91-C4FE74413D72}.Release|x64.Build.0 = Release|x64
-		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Debug|x64.ActiveCfg = Debug|x64
-		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Debug|x64.Build.0 = Debug|x64
-		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Release|x64.ActiveCfg = Release|x64
-		{E161DCCB-4DF3-4DBD-90F7-2C2BA3AEE19C}.Release|x64.Build.0 = Release|x64
 		{51982A78-561A-4829-AA51-F0F35F48E082}.Debug|x64.ActiveCfg = Debug|x64
 		{51982A78-561A-4829-AA51-F0F35F48E082}.Debug|x64.Build.0 = Debug|x64
 		{51982A78-561A-4829-AA51-F0F35F48E082}.Release|x64.ActiveCfg = Release|x64
@@ -62,6 +49,12 @@ Global
 		{F9A0DCAB-EB1E-438C-BB63-60951D8DDB6D}.Debug|x64.Build.0 = Debug|x64
 		{F9A0DCAB-EB1E-438C-BB63-60951D8DDB6D}.Release|x64.ActiveCfg = Release|x64
 		{F9A0DCAB-EB1E-438C-BB63-60951D8DDB6D}.Release|x64.Build.0 = Release|x64
+		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}.Debug|x64.ActiveCfg = Debug|x64
+		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}.Debug|x64.Build.0 = Debug|x64
+		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}.Release|x64.ActiveCfg = Release|x64
+		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}.Release|x64.Build.0 = Release|x64
+		{62E8514F-55EE-2A59-08F3-D7C050FEA4D8}.Debug|x64.ActiveCfg = Debug|x64
+		{62E8514F-55EE-2A59-08F3-D7C050FEA4D8}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

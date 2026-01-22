@@ -24,8 +24,6 @@
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "resource.h"
-#include "../DRIMText/DRIMTextObj.h"
-#include "../DRIText/DRITextObject.h"
 #include "../NorsynObjects/NSText.h"
 
 //-----------------------------------------------------------------------------
@@ -45,7 +43,7 @@ public:
 		AcRx::AppRetCode retCode = AcRxArxApp::On_kInitAppMsg(pkt);
 
 		// TODO: Add your initialization code here
-
+		acutPrintf(_T("\nRTWNST -> Replace AcDbText with NSText."));
 		return (retCode);
 	}
 	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) {
@@ -59,126 +57,7 @@ public:
 		return (retCode);
 	}
 	virtual void RegisterServerComponents() {
-	}
-
-	static void CommandsReplaceTextWithDRIText() {
-		AcDbObjectIdArray ids{};
-		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
-		AcDbObjectId modelSpaceId;
-		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
-		AcDbBlockTableRecordPointer modelSpace(modelSpaceId, AcDb::kForRead, true);
-
-		Acad::ErrorStatus es;
-		AcDbBlockTableRecordIterator* pBtrIter;
-		if ((es = modelSpace->newIterator(pBtrIter)) != Acad::eOk)
-		{
-			acutPrintf(_T("\nCouldn't create Model Space iterator."));
-			return;
-		}
-
-		AcDbObjectId id;
-		for (pBtrIter->start(); !pBtrIter->done(); pBtrIter->step())
-		{
-			if ((es = pBtrIter->getEntityId(id)) != Acad::eOk) continue;
-			if (id.objectClass() == AcDbText::desc()) ids.append(id);
-		}
-
-		acutPrintf(_T("\nThere are %d objects in id array!"), ids.length());
-
-		modelSpace->upgradeOpen(); //Upgrade for write
-
-		for (auto curId = ids.begin(); curId != ids.end(); ++curId)
-		{
-			AcDbObjectPointer<AcDbText> originalText;
-			originalText.open(*curId, AcDb::kForWrite);
-
-			AcDbObjectPointer<DRIText> newText;
-			newText.create();
-
-			newText->setAlignmentPoint(originalText->alignmentPoint());
-			newText->setPosition(originalText->position());
-			newText->setLayer(originalText->layer());
-			newText->setTextString(originalText->textString());
-			newText->setRotation(originalText->rotation());
-			newText->setHeight(originalText->height());
-			newText->setHorizontalMode(originalText->horizontalMode());
-			newText->setVerticalMode(originalText->verticalMode());
-
-			if (modelSpace->appendAcDbEntity(newText) == Acad::eOk)
-			{
-				originalText->upgradeOpen();
-				originalText->erase(true);
-			}
-		}
-	}
-
-	static void CommandsReplaceMTextWithDRIMText() {
-		AcDbObjectIdArray ids{};
-		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
-		AcDbObjectId modelSpaceId;
-		pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
-		AcDbBlockTableRecordPointer modelSpace(modelSpaceId, AcDb::kForRead, true);
-
-		Acad::ErrorStatus es;
-		AcDbBlockTableRecordIterator* pBtrIter;
-		if ((es = modelSpace->newIterator(pBtrIter)) != Acad::eOk)
-		{
-			acutPrintf(_T("\nCouldn't create Model Space iterator."));
-			return;
-		}
-
-		AcDbObjectId id;
-		for (pBtrIter->start(); !pBtrIter->done(); pBtrIter->step())
-		{
-			if ((es = pBtrIter->getEntityId(id)) != Acad::eOk) continue;
-			AcDbObjectPointer<AcDbMText> pEnt(id, AcDb::kForRead);
-			if (pEnt.openStatus() != Acad::eOk) continue;
-			if (!pEnt->isKindOf(AcDbMText::desc())) continue;
-
-			// Get layer name
-			AcString layerName;
-			pEnt->layer(layerName);
-
-			// Check layer name
-			if (layerName == _T("FJV-DIM")) {
-				ids.append(id);
-			}
-		}
-
-		acutPrintf(_T("\nThere are %d objects in id array!"), ids.length());
-
-		modelSpace->upgradeOpen(); //Upgrade for write
-
-		for (auto curId = ids.begin(); curId != ids.end(); ++curId)
-		{
-			AcDbObjectPointer<AcDbMText> originalText;
-			originalText.open(*curId, AcDb::kForWrite);
-
-			AcDbObjectPointer<DRIMTextObj> newText;
-			newText.create();
-
-			newText->setLocation(originalText->location());
-			//newText->setAlignmentPoint(originalText->alignmentPoint());
-			//newText->setPosition(originalText->position());
-			newText->setLayer(originalText->layer());
-			//newText->setTextString(originalText->textString());
-			newText->setContents(originalText->contents());
-			newText->setRotation(originalText->rotation());
-			newText->setTextHeight(originalText->textHeight());
-			//newText->setHorizontalMode(originalText->horizontalMode());
-			//newText->setVerticalMode(originalText->verticalMode());
-			newText->setAttachment(AcDbMText::AttachmentPoint(5));
-			newText->setBackgroundFill(true);
-			newText->setUseBackgroundColor(true);
-			newText->setBackgroundScaleFactor(1.0);
-
-			if (modelSpace->appendAcDbEntity(newText) == Acad::eOk)
-			{
-				originalText->upgradeOpen();
-				originalText->erase(true);
-			}
-		}
-	}
+	}	
 
 	static void CommandsReplaceTextWithNSText() {
 		AcDbObjectIdArray ids{};
@@ -235,6 +114,4 @@ public:
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CCommandsApp)
 
-ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceTextWithDRIText, RTWDT, ACRX_CMD_MODAL, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceMTextWithDRIMText, RMTWDMT, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceTextWithNSText, RTWNST, ACRX_CMD_MODAL, NULL)

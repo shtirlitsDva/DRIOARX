@@ -81,7 +81,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>../DRIText/$(Platform)/$(Configuration)/DRIDRIText.lib;../DRIMText/$(Platform)/$(Configuration)/DRIDRIMText.lib;../NorsynObjects/$(Platform)/$(Configuration)/NSNorsynObjects.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../NorsynObjects/$(Platform)/$(Configuration)/NSNorsynObjects.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
