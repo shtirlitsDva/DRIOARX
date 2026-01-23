@@ -24,7 +24,7 @@
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "resource.h"
-#include "../NorsynObjects/NSText.h"
+#include "../NorsynObjects/Entites/NSText/NSText.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("NS")

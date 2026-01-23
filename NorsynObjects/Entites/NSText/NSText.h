@@ -77,6 +77,9 @@ protected:
 	virtual Adesk::Boolean subWorldDraw (AcGiWorldDraw *mode) ;
 	virtual Adesk::UInt32 subSetAttributes (AcGiDrawableTraits *traits) ;
 
+	//- Explode protocol
+	virtual Acad::ErrorStatus subExplode (AcDbVoidPtrArray &entitySet) const ;
+
 } ;
 
 #ifdef NORSYNOBJECTS_MODULE

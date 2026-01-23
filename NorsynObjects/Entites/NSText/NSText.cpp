@@ -278,4 +278,43 @@ Adesk::UInt32 NSText::subSetAttributes(AcGiDrawableTraits * traits) {
 	return (AcDbText::subSetAttributes(traits));
 }
 
+//-----------------------------------------------------------------------------
+//----- Explode protocol
+//----- Converts NSText to a regular AcDbText with identical properties
+Acad::ErrorStatus NSText::subExplode(AcDbVoidPtrArray & entitySet) const {
+	assertReadEnabled();
+
+	//----- Create a new AcDbText with the same properties
+	AcDbText* pText = new AcDbText();
+
+	//----- Copy all text properties
+	pText->setPosition(position());
+	pText->setAlignmentPoint(alignmentPoint());
+	pText->setHeight(height());
+	pText->setRotation(rotation());
+	pText->setWidthFactor(widthFactor());
+	pText->setOblique(oblique());
+	pText->setTextStyle(textStyle());
+	pText->setHorizontalMode(horizontalMode());
+	pText->setVerticalMode(verticalMode());
+	pText->setNormal(normal());
+	pText->setThickness(thickness());
+
+	//----- Copy text string
+	AcString textStr;
+	textString(textStr);
+	pText->setTextString(textStr);
+
+	//----- Copy common entity properties
+	pText->setLayer(layerId());
+	pText->setLinetype(linetypeId());
+	pText->setColor(color());
+	pText->setLinetypeScale(linetypeScale());
+	pText->setLineWeight(lineWeight());
+
+	//----- Add to output array
+	entitySet.append(pText);
+
+	return Acad::eOk;
+}
 
