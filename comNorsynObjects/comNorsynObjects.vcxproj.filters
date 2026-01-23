@@ -20,6 +20,9 @@
     <Filter Include="ComNSText">
       <UniqueIdentifier>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ComNSMText">
+      <UniqueIdentifier>{4AD5FEEE-E02F-4E89-B417-9D8F2DE8F2E8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -43,6 +46,9 @@
     <ClInclude Include="ComNSText\ComNSText.h">
       <Filter>ComNSText</Filter>
     </ClInclude>
+    <ClInclude Include="ComNSMText\ComNSMText.h">
+      <Filter>ComNSMText</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="comNorsynObjects.cpp">
@@ -60,6 +66,9 @@
     <ClCompile Include="ComNSText\ComNSText.cpp">
       <Filter>ComNSText</Filter>
     </ClCompile>
+    <ClCompile Include="ComNSMText\ComNSMText.cpp">
+      <Filter>ComNSMText</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="comNorsynObjects.rc">
@@ -75,6 +84,9 @@
     </None>
     <None Include="ComNSText\ComNSText.rgs">
       <Filter>ComNSText</Filter>
+    </None>
+    <None Include="ComNSMText\ComNSMText.rgs">
+      <Filter>ComNSMText</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

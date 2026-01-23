@@ -30,6 +30,15 @@ library comNorsynObjectsLib
 		[source] interface IAcadObjectEvents;
 	};
 
-	// Add more coclasses here for future entities:
-	// coclass ComNSMText { ... };
+	// ComNSMText coclass - wrapper for NSMText entity
+	[
+		uuid(758A02FA-8E26-4FB3-8C75-0BA4CB158D15),
+		helpstring("ComNSMText Class"),
+		noncreatable
+	]
+	coclass ComNSMText
+	{
+		[default] interface IAcadMText;
+		[source] interface IAcadObjectEvents;
+	};
 };

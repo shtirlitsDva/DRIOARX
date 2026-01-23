@@ -1,0 +1,23 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {758A02FA-8E26-4FB3-8C75-0BA4CB158D15} = s 'ComNSMText Class'
+		{
+			ProgID = s 'comNorsynObjects.ComNSMText.1'
+			VersionIndependentProgID = s 'comNorsynObjects.ComNSMText'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{7c99a33f-a411-48d6-9707-81badecc45f7}'
+		}
+	}
+	NoRemove AutoCAD.Application
+	{
+		NoRemove Classes
+		{
+			ForceRemove NSMText = s '{758A02FA-8E26-4FB3-8C75-0BA4CB158D15}'
+		}
+	}
+}

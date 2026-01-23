@@ -9,6 +9,7 @@
 
 // Include COM wrapper classes - OBJECT_ENTRY_AUTO registers them
 #include "ComNSText\ComNSText.h"
+#include "ComNSMText\ComNSMText.h"
 
 using namespace ATL;
 

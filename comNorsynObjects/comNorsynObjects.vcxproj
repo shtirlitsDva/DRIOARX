@@ -227,6 +227,7 @@
   <ItemGroup>
     <ClInclude Include="comNorsynObjects_i.h" />
     <ClInclude Include="ComNSText\ComNSText.h" />
+    <ClInclude Include="ComNSMText\ComNSMText.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -236,6 +237,7 @@
   <ItemGroup>
     <ClCompile Include="comNorsynObjects.cpp" />
     <ClCompile Include="ComNSText\ComNSText.cpp" />
+    <ClCompile Include="ComNSMText\ComNSMText.cpp" />
     <ClCompile Include="comNorsynObjects_i.c">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
@@ -278,6 +280,7 @@
     <None Include="comNorsynObjects.def" />
     <None Include="comNorsynObjects.rgs" />
     <None Include="ComNSText\ComNSText.rgs" />
+    <None Include="ComNSMText\ComNSMText.rgs" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="comNorsynObjects.idl" />

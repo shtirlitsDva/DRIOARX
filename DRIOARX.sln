@@ -14,6 +14,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Commands", "Commands\Commands.vcxproj", "{F9A0DCAB-EB1E-438C-BB63-60951D8DDB6D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{163DB0C2-1F07-4E71-A48B-95123085E2E4} = {163DB0C2-1F07-4E71-A48B-95123085E2E4}
+		{3201652B-7D97-43F4-8F91-C4FE74413D72} = {3201652B-7D97-43F4-8F91-C4FE74413D72}
+		{32DC8B4C-3F61-4980-9A15-2A23937A2E96} = {32DC8B4C-3F61-4980-9A15-2A23937A2E96}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "comNorsynObjects", "comNorsynObjects\comNorsynObjects.vcxproj", "{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}"
@@ -22,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "comNorsynObjectsPS", "comNo
 	ProjectSection(ProjectDependencies) = postProject
 		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A} = {FDF51364-571C-EABD-A7D4-15EE0C32BB1A}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DRIText", "DRIText\DRIText.vcxproj", "{32DC8B4C-3F61-4980-9A15-2A23937A2E96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +59,10 @@ Global
 		{FDF51364-571C-EABD-A7D4-15EE0C32BB1A}.Release|x64.Build.0 = Release|x64
 		{62E8514F-55EE-2A59-08F3-D7C050FEA4D8}.Debug|x64.ActiveCfg = Debug|x64
 		{62E8514F-55EE-2A59-08F3-D7C050FEA4D8}.Release|x64.ActiveCfg = Release|x64
+		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Debug|x64.ActiveCfg = Debug|x64
+		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Debug|x64.Build.0 = Debug|x64
+		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Release|x64.ActiveCfg = Release|x64
+		{32DC8B4C-3F61-4980-9A15-2A23937A2E96}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

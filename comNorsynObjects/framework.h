@@ -41,3 +41,8 @@
 #include <tchar.h>
 
 #pragma pack(pop)
+
+//-----------------------------------------------------------------------------
+// Global instance handle for resource access (defined in dllmain.cpp)
+//-----------------------------------------------------------------------------
+extern HINSTANCE _hdllInstance;

@@ -6,6 +6,7 @@
 #define IDS_PROJNAME                    100
 #define IDR_COMNORSYNOBJECTS            101
 #define IDR_COMNSTEXT                   102
+#define IDR_COMNSMTEXT                  103
 
 // Next default values for new objects
 //

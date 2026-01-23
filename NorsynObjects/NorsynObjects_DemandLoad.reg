@@ -1,0 +1,10 @@
+Windows Registry Editor Version 5.00
+
+; Demand loading for NorsynObjects.dbx
+; AutoCAD 2025 - ObjectDBX R25.0
+; LOADCTRLS: 0x0D = full demand loading
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Autodesk\ObjectDBX\R25.0\Applications\NSNORSYNOBJECTSAPP]
+"DESCRIPTION"="Norsyn Custom Objects"
+"LOADER"="X:\\AutoCAD DRI - 01 Civil 3D\\Appload\\2025\\NSNorsynObjects.dbx"
+"LOADCTRLS"=dword:0000000D

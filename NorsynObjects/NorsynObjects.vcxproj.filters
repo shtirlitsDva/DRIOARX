@@ -27,6 +27,9 @@
     <ClCompile Include="Entites\NSText\NSText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Entites\NSMText\NSMText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entites\NSText\NSText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entites\NSMText\NSMText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

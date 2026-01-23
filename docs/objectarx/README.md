@@ -10,6 +10,7 @@ LLM-friendly documentation for ObjectARX development patterns, techniques, and s
 | Document | Description |
 |----------|-------------|
 | [demand-loading.md](./demand-loading.md) | Automatic DBX/ARX loading via registry configuration |
+| [com-wrapper.md](./com-wrapper.md) | COM wrapper for Properties Palette entity type names |
 </documents>
 
 <conventions>
@@ -27,7 +28,9 @@ This format is optimized for LLM parsing and retrieval.
 </conventions>
 
 <related>
-## Related Documentation
+## Related Projects
 
-- [comNorsynObjects/AGENTS.md](../../comNorsynObjects/AGENTS.md) - COM wrapper implementation guide
+- `NorsynObjects/` - Custom entity DBX module (NSText, etc.)
+- `comNorsynObjects/` - COM wrapper DLL for Properties Palette
+- `Commands/` - ARX command module
 </related>
