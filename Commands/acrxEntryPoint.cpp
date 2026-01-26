@@ -25,6 +25,8 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include <memory>
+#include <string>
+#include <ShObjIdl.h>
 #include "../NorsynObjects/Entites/NSText/NSText.h"
 #include "../NorsynObjects/Entites/NSMText/NSMText.h"
 #include "../DRIMText/DRIMTextObj.h"
@@ -32,6 +34,39 @@
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("NS")
+
+// Folder picker using modern IFileOpenDialog (looks like a file dialog, not the old SHBrowseForFolder)
+static bool PickFolderDialog(std::wstring& outPath)
+{
+	IFileOpenDialog* pDlg = nullptr;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
+		IID_IFileOpenDialog, reinterpret_cast<void**>(&pDlg));
+	if (FAILED(hr)) return false;
+
+	DWORD dwOptions = 0;
+	pDlg->GetOptions(&dwOptions);
+	pDlg->SetOptions(dwOptions | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM);
+	pDlg->SetTitle(L"Select folder containing *-rot.dwg files");
+
+	hr = pDlg->Show(adsw_acadMainWnd());
+	if (FAILED(hr)) { pDlg->Release(); return false; }
+
+	IShellItem* pItem = nullptr;
+	hr = pDlg->GetResult(&pItem);
+	if (SUCCEEDED(hr))
+	{
+		PWSTR pszPath = nullptr;
+		hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszPath);
+		if (SUCCEEDED(hr))
+		{
+			outPath = pszPath;
+			CoTaskMemFree(pszPath);
+		}
+		pItem->Release();
+	}
+	pDlg->Release();
+	return SUCCEEDED(hr);
+}
 
 //-----------------------------------------------------------------------------
 //----- ObjectARX EntryPoint
@@ -51,6 +86,7 @@ public:
 		acutPrintf(_T("\nRTWNDT -> Replace DRIText with NSText."));
 		acutPrintf(_T("\nRTWNSMT -> Replace AcDbMText with NSMText."));
 		acutPrintf(_T("\nRTWNDMT -> Replace DRIMTextObj with NSMText."));
+		acutPrintf(_T("\nBRTWNDT -> Batch convert DRIText to NSText in *-rot.dwg files from a folder."));
 		return (retCode);
 	}
 	virtual AcRx::AppRetCode On_kUnloadAppMsg(void* pkt) {
@@ -222,6 +258,142 @@ public:
 		}
 	}
 
+	static void CommandsBatchReplaceDRITextWithNSText() {
+		std::wstring folderPath;
+		if (!PickFolderDialog(folderPath))
+		{
+			acutPrintf(_T("\nFolder selection cancelled."));
+			return;
+		}
+
+		std::wstring searchPattern = folderPath + L"\\*-rot.dwg";
+		WIN32_FIND_DATA fd;
+		HANDLE hFind = FindFirstFile(searchPattern.c_str(), &fd);
+		if (hFind == INVALID_HANDLE_VALUE)
+		{
+			acutPrintf(_T("\nNo *-rot.dwg files found in: %s"), folderPath.c_str());
+			return;
+		}
+
+		int totalFiles = 0, totalConverted = 0;
+
+		do
+		{
+			if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) continue;
+
+			std::wstring fileName = fd.cFileName;
+			std::wstring fullPath = folderPath + L"\\" + fileName;
+
+			// Create backup: something-rot.dwg -> something-rot.bak.dwg
+			std::wstring backupPath = fullPath;
+			size_t dotPos = backupPath.rfind(L".dwg");
+			if (dotPos != std::wstring::npos)
+				backupPath.insert(dotPos, L".bak");
+
+			if (!CopyFile(fullPath.c_str(), backupPath.c_str(), FALSE))
+			{
+				acutPrintf(_T("\nFailed to create backup for: %s"), fileName.c_str());
+				continue;
+			}
+			acutPrintf(_T("\nBackup created: %s"), backupPath.c_str());
+
+			// Side-load the drawing as a separate database
+			AcDbDatabase* pDb = new AcDbDatabase(false, true);
+			if (pDb->readDwgFile(fullPath.c_str()) != Acad::eOk)
+			{
+				acutPrintf(_T("\nFailed to read: %s"), fileName.c_str());
+				delete pDb;
+				continue;
+			}
+
+			// Get model space from the side-loaded database
+			AcDbBlockTable* pBlockTable = nullptr;
+			if (pDb->getBlockTable(pBlockTable, AcDb::kForRead) != Acad::eOk)
+			{
+				acutPrintf(_T("\nFailed to get block table: %s"), fileName.c_str());
+				delete pDb;
+				continue;
+			}
+
+			AcDbObjectId modelSpaceId;
+			pBlockTable->getAt(ACDB_MODEL_SPACE, modelSpaceId);
+			pBlockTable->close();
+
+			AcDbBlockTableRecord* pModelSpace = nullptr;
+			if (acdbOpenObject(pModelSpace, modelSpaceId, AcDb::kForRead) != Acad::eOk)
+			{
+				acutPrintf(_T("\nFailed to open model space: %s"), fileName.c_str());
+				delete pDb;
+				continue;
+			}
+
+			// Collect DRIText object IDs
+			AcDbObjectIdArray ids;
+			AcDbBlockTableRecordIterator* pIter = nullptr;
+			if (pModelSpace->newIterator(pIter) == Acad::eOk)
+			{
+				for (pIter->start(); !pIter->done(); pIter->step())
+				{
+					AcDbObjectId id;
+					if (pIter->getEntityId(id) == Acad::eOk)
+					{
+						if (id.objectClass() == DRIText::desc())
+							ids.append(id);
+					}
+				}
+				delete pIter;
+			}
+
+			acutPrintf(_T("\n%s: %d DRIText objects found."), fileName.c_str(), ids.length());
+
+			if (ids.length() > 0)
+			{
+				pModelSpace->upgradeOpen();
+
+				for (auto curId = ids.begin(); curId != ids.end(); ++curId)
+				{
+					AcDbObjectPointer<DRIText> originalText;
+					originalText.open(*curId, AcDb::kForWrite);
+					if (originalText.openStatus() != Acad::eOk) continue;
+
+					AcDbObjectPointer<NSText> newText;
+					newText.create();
+
+					newText->setAlignmentPoint(originalText->alignmentPoint());
+					newText->setPosition(originalText->position());
+					newText->setLayer(originalText->layer());
+					newText->setTextString(originalText->textString());
+					newText->setRotation(originalText->rotation());
+					newText->setHeight(originalText->height());
+					newText->setHorizontalMode(originalText->horizontalMode());
+					newText->setVerticalMode(originalText->verticalMode());
+
+					if (pModelSpace->appendAcDbEntity(newText) == Acad::eOk)
+					{
+						originalText->erase(true);
+						totalConverted++;
+					}
+				}
+			}
+
+			pModelSpace->close();
+
+			if (pDb->saveAs(fullPath.c_str()) != Acad::eOk)
+				acutPrintf(_T("\nFailed to save: %s"), fileName.c_str());
+			else
+				acutPrintf(_T("\nSaved: %s"), fileName.c_str());
+
+			delete pDb;
+			totalFiles++;
+
+		} while (FindNextFile(hFind, &fd));
+
+		FindClose(hFind);
+
+		acutPrintf(_T("\nBatch complete. %d files processed, %d DRIText objects converted."),
+			totalFiles, totalConverted);
+	}
+
 	static void CommandsReplaceDRIMTextWithNSMText() {
 		AcDbObjectIdArray ids{};
 		AcDbBlockTablePointer pBlockTable(acdbCurDwg());
@@ -282,3 +454,4 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceTextWithNSText, RTWNST
 ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceDRITextWithNSText, RTWNDT, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceMTextWithNSMText, RTWNSMT, ACRX_CMD_MODAL, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, ReplaceDRIMTextWithNSMText, RTWNDMT, ACRX_CMD_MODAL, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CCommandsApp, Commands, BatchReplaceDRITextWithNSText, BRTWNDT, ACRX_CMD_MODAL, NULL)
