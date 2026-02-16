@@ -57,5 +57,6 @@
     <None Include="Autodesk.arx-2025.props" />
     <None Include="Autodesk.arx-2025-net.props" />
     <None Include="crx.props" />
+    <None Include="NorsynObjects_DemandLoad.reg" />
   </ItemGroup>
 </Project>
